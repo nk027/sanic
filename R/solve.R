@@ -94,6 +94,7 @@ solve_qr <- function(A, b, pivot = FALSE) {
 #' @param verbose Whether to print iterations and tolerance
 #'
 #' @importFrom Matrix Matrix
+#' @importFrom methods as
 #'
 #' @export
 #' @examples
@@ -106,7 +107,7 @@ solve_cg <- function(A, b,
   is_sparse <- inherits(A, "dgCMatrix")
   is_matrix <- inherits(A, "matrix")
   if(!is_sparse)
-    if(is_matrix) A <- Matrix(A, sparse = TRUE) else stop("Please provide a matrix.")
+    if(is_matrix) A <- as(A, "sparseMatrix") else stop("Please provide a matrix.")
 
   is_square <- diff(dim(A)) == 0
   if(!is_square) stop("Please provide a square matrix (or use SVD).")
@@ -115,7 +116,7 @@ solve_cg <- function(A, b,
   verbose <- isTRUE(verbose)
 
   if(!missing(x0)) stopifnot(is.numeric(x0)) else {
-    x0 <- if(is.vector(b)) rep(0, nrow(A)) else matrix(0, nrow(A), ncol(A))
+    x0 <- if(is.vector(b)) rep(0, length(b)) else matrix(0, nrow(b), ncol(b))
   }
   if(!missing(tol)) stopifnot(is.numeric(tol) && iter > 0) else tol <- 0L
   if(!missing(iter)) stopifnot(is.integer(iter) && iter > 0) else iter <- 0L
@@ -125,8 +126,8 @@ solve_cg <- function(A, b,
   # Execute -----
   if(type == "BiCGSTAB")
     return(solve_BCGST(A, b, x0 = x0, tol = tol, iter = iter, verbose = verbose))
-  if(type == "TNBiCGSTAB")
-    return(solve_TNBCGST(A, b, x0 = x0, tol = tol, iter = iter, verbose = verbose))
+  if(type == "DTNSBiCGSTAB")
+    return(solve_DTNSBCGST(A, b, x0 = x0, tol = tol, iter = iter, verbose = verbose))
   if(type == "LSCG")
     return(solve_CGLS(A, b, x0 = x0, tol = tol, iter = iter, verbose = verbose))
   # if(type == "CG")

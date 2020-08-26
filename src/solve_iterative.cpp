@@ -1,18 +1,18 @@
 
 #include <RcppEigen.h>
-#include "TNSPreconditioner.h"
+#include "DTNSPreconditioner.h"
 
 // [[Rcpp::depends(RcppEigen)]]
 
 
 // [[Rcpp::export]]
-Eigen::MatrixXd solve_TNBCGST(
+Eigen::MatrixXd solve_DTNSBCGST(
   Eigen::MappedSparseMatrix<double> A, 
   Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0,
   double tol = 0, int iter = 0, bool verbose = false) {
   
   Eigen::BiCGSTAB<Eigen::SparseMatrix<double>, 
-    TNSPreconditioner<double> > solver;
+    DTNSPreconditioner<double> > solver;
   
   if(tol) {
     solver.setTolerance(tol);

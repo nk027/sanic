@@ -10,7 +10,7 @@ Description: Fast routines for solving (or inverting) relatively large systems o
 URL: https://github.com/nk027/sanic
 BugReports: https://github.com/nk027/sanic/issues
 Depends: R (>= 3.3.0)
-Imports: Rcpp (>= 1.0.5), Matrix
+Imports: Rcpp (>= 1.0.5), Matrix, methods
 License: GPL-3
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppEigen

@@ -37,8 +37,8 @@ solve_SQR <- function(A, b) {
     .Call('_sanic_solve_SQR', PACKAGE = 'sanic', A, b)
 }
 
-solve_TNBCGST <- function(A, b, x0, tol = 0, iter = 0L, verbose = FALSE) {
-    .Call('_sanic_solve_TNBCGST', PACKAGE = 'sanic', A, b, x0, tol, iter, verbose)
+solve_DTNSBCGST <- function(A, b, x0, tol = 0, iter = 0L, verbose = FALSE) {
+    .Call('_sanic_solve_DTNSBCGST', PACKAGE = 'sanic', A, b, x0, tol, iter, verbose)
 }
 
 solve_BCGST <- function(A, b, x0, tol = 0, iter = 0L, verbose = FALSE) {

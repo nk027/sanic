@@ -17,5 +17,5 @@ solve_chol(A, b, type = c("LDLT", "LLT"))
 Solve using Cholesky
 }
 \examples{
-solve_chol(matrix(rnorm(9), 3), rnorm(3))
+solve_chol(crossprod(matrix(rnorm(9), 3)), rnorm(3))
 }
