@@ -6,10 +6,10 @@
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_PPLU(
-  Eigen::Map<Eigen::MatrixXd> A, 
+  Eigen::Map<Eigen::MatrixXd> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-    
-  Eigen::PartialPivLU<Eigen::MatrixXd> lu(A);
+
+  Eigen::PartialPivLU<Eigen::MatrixXd> lu(a);
   Eigen::MatrixXd x = lu.solve(b);
 
   return x;
@@ -18,10 +18,10 @@ Eigen::MatrixXd solve_PPLU(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_SLU(
-  Eigen::MappedSparseMatrix<double> A, 
+  Eigen::MappedSparseMatrix<double> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-    
-  Eigen::SparseLU<Eigen::SparseMatrix<double> > lu(A);
+
+  Eigen::SparseLU<Eigen::SparseMatrix<double> > lu(a);
   Eigen::MatrixXd x = lu.solve(b);
 
   return x;

@@ -6,10 +6,10 @@
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_HQR(
-  Eigen::Map<Eigen::MatrixXd> A, 
+  Eigen::Map<Eigen::MatrixXd> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-  
-  Eigen::HouseholderQR<Eigen::MatrixXd> qr(A);
+
+  Eigen::HouseholderQR<Eigen::MatrixXd> qr(a);
   Eigen::MatrixXd x = qr.solve(b);
 
   return x;
@@ -18,10 +18,10 @@ Eigen::MatrixXd solve_HQR(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_CPHQR(
-  Eigen::Map<Eigen::MatrixXd> A,
+  Eigen::Map<Eigen::MatrixXd> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-  
-  Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(A);
+
+  Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(a);
   Eigen::MatrixXd x = qr.solve(b);
 
   return x;
@@ -30,10 +30,10 @@ Eigen::MatrixXd solve_CPHQR(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_SQR(
-  Eigen::MappedSparseMatrix<double> A, 
+  Eigen::MappedSparseMatrix<double> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-  
-  Eigen::SparseLU<Eigen::SparseMatrix<double> > qr(A);
+
+  Eigen::SparseLU<Eigen::SparseMatrix<double> > qr(a);
   Eigen::MatrixXd x = qr.solve(b);
 
   return x;

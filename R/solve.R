@@ -1,135 +1,127 @@
 
-#' @title Solve using Cholesky
+#' @title Solve a System of Equations using Cholesky factorization
 #'
-#' @param A lhs
+#'
+#'
+#' @param a
 #' @param b rhs
 #' @param type Whether to decompose to LDLT or LLT
 #'
 #' @export
 #' @examples
 #' solve_chol(crossprod(matrix(rnorm(9), 3)), rnorm(3))
-solve_chol <- function(A, b, type = c("LDLT", "LLT")) {
+solve_chol <- function(a, b, type = c("LDLT", "LLT")) {
 
   # Checks -----
-  is_matrix <- inherits(A, "matrix")
-  is_sparse <- inherits(A, "dgCMatrix")
-  if(!is_matrix && !is_sparse) stop("Please provide a matrix.")
-
-  is_square <- diff(dim(A)) == 0
-  if(!is_square) stop("Please provide a square matrix (or use SVD).")
-
   type <- match.arg(type)
 
-  if(missing(b)) b <- diag(nrow(A))
+  is_matrix <- is.matrix(a)
+  is_sparse <- inherits(a, "dgCMatrix")
+  if(!is_matrix && !is_sparse) {
+    stop("Please provide a as matrix (or sparse 'dgCMatrix').")
+  }
+
+  if(missing(b)) {b <- diag(dim(a)[1L])} else {
+    if(!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
+      stop("Please provide b as a numeric vector or matrix.")
+    }
+
+  is_square <- diff(dim(a)) == 0L
+  if(!is_square) {stop("Please provide a square matrix a.")}
 
   # Execute -----
-  if(is_matrix)
-    if(type == "LDLT") return(solve_LDLT(A, b)) else return(solve_LLT(A, b))
-  if(type == "LDLT") return(solve_SLDLT(A, b)) else return(solve_SLLT(A, b))
+  if(is_matrix) { # Dense
+    if(type == "LDLT") {
+      return(solve_LDLT(a, b))
+    } else {
+      return(solve_LLT(a, b))
+    }
+  } else { # Sparse
+    if(type == "LDLT") {
+      return(solve_SLDLT(a, b))
+    } else {
+      return(solve_SLLT(a, b))
+    }
+  }
 }
 
 
-#' @title Solve using LU
+#' @title Solve a System of Equations using LU factorization
 #'
-#' @param A lhs
+#' @param a lhs
 #' @param b rhs
 #'
 #' @export
 #' @examples
 #' solve_lu(matrix(rnorm(9), 3), rnorm(3))
-solve_lu <- function(A, b) {
+solve_lu <- function(a, b) {
 
   # Checks -----
-  is_matrix <- inherits(A, "matrix")
-  is_sparse <- inherits(A, "dgCMatrix")
-  if(!is_matrix && !is_sparse) stop("Please provide a matrix.")
+  is_matrix <- is.matrix(a)
+  is_sparse <- inherits(a, "dgCMatrix")
+  if(!is_matrix && !is_sparse) {
+    stop("Please provide a as matrix (or sparse 'dgCMatrix').")
+  }
 
-  is_square <- diff(dim(A)) == 0
-  if(!is_square) stop("Please provide a square matrix (or use SVD).")
+  if(missing(b)) {b <- diag(dim(a)[1L])} else {
+    if(!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
+      stop("Please provide b as a numeric vector or matrix.")
+    }
 
-  if(missing(b)) b <- diag(nrow(A))
+  is_square <- diff(dim(a)) == 0L
+  if(!is_square) {stop("Please provide a square matrix a.")}
 
   # Execute -----
-  if(is_matrix) return(solve_PPLU(A, b))
-  return(solve_SLU(A, b))
+  if(is_matrix) { # Dense
+    return(solve_PPLU(a, b))
+  } else { # Sparse
+    return(solve_SLU(a, b))
+  }
 }
 
 
 #' @title Solve using QR
 #'
-#' @param A lhs
+#' @param a lhs
 #' @param b rhs
 #' @param pivot Whether to pivot
 #'
 #' @export
 #' @examples
 #' solve_qr(matrix(rnorm(9), 3), rnorm(3))
-solve_qr <- function(A, b, pivot = FALSE) {
+solve_qr <- function(a, b, pivot = TRUE) {
 
   # Checks -----
-  is_matrix <- inherits(A, "matrix")
-  is_sparse <- inherits(A, "dgCMatrix")
-  if(!is_matrix && !is_sparse) stop("Please provide a matrix.")
-
-  if(missing(b)) b <- diag(nrow(A))
-
-  is_square <- diff(dim(A)) == 0
-  if(!is_square) stop("Please provide a square matrix (or use SVD).")
-
-  # Execute -----
-  if(is_matrix)
-    if(pivot) return(solve_CPHQR(A, b)) else return(solve_HQR(A, b))
-  return(solve_SQR(A, b))
-}
-
-
-#' @title Solve using conjugate gradient
-#'
-#' @param A lhs
-#' @param b rhs
-#' @param type Whether to use the BiCGSTAB, least squares CG or CG solver
-#' @param x0 Initial guess
-#' @param iter Iterations
-#' @param tol Tolerance
-#' @param verbose Whether to print iterations and tolerance
-#'
-#' @importFrom Matrix Matrix
-#' @importFrom methods as
-#'
-#' @export
-#' @examples
-#' solve_cg(matrix(rnorm(9), 3), rnorm(3))
-solve_cg <- function(A, b,
-  type = c("BiCGSTAB", "TNBiCGSTAB", "LSCG", "CG"),
-  x0, tol, iter, verbose = FALSE) {
-
-  # Checks -----
-  is_sparse <- inherits(A, "dgCMatrix")
-  is_matrix <- inherits(A, "matrix")
-  if(!is_sparse)
-    if(is_matrix) A <- as(A, "sparseMatrix") else stop("Please provide a matrix.")
-
-  is_square <- diff(dim(A)) == 0
-  if(!is_square) stop("Please provide a square matrix (or use SVD).")
-
-  type <- match.arg(type)
-  verbose <- isTRUE(verbose)
-
-  if(!missing(x0)) stopifnot(is.numeric(x0)) else {
-    x0 <- if(is.vector(b)) rep(0, length(b)) else matrix(0, nrow(b), ncol(b))
+  is_matrix <- is.matrix(a)
+  is_sparse <- inherits(a, "dgCMatrix")
+  if(!is_matrix && !is_sparse) {
+    stop("Please provide a as matrix (or sparse 'dgCMatrix').")
   }
-  if(!missing(tol)) stopifnot(is.numeric(tol) && iter > 0) else tol <- 0L
-  if(!missing(iter)) stopifnot(is.integer(iter) && iter > 0) else iter <- 0L
 
-  if(missing(b)) b <- diag(nrow(A))
+  if(missing(b)) {b <- diag(dim(a)[1L])} else {
+    if(!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
+      stop("Please provide b as a numeric vector or matrix.")
+    }
+  }
+
+  b_rows <- if(is.null(dim(b))) {length(b)} else {dim(b)[1L]}
+  is_fitting <- diff(dim(a)[1L], b_rows) == 0L
+  if(!is_fitting) {stop("Both a and b must have the same number of rows.")}
+
+  pivot <- isTRUE(pivot)
 
   # Execute -----
-  if(type == "BiCGSTAB")
-    return(solve_BCGST(A, b, x0 = x0, tol = tol, iter = iter, verbose = verbose))
-  if(type == "DTNSBiCGSTAB")
-    return(solve_DTNSBCGST(A, b, x0 = x0, tol = tol, iter = iter, verbose = verbose))
-  if(type == "LSCG")
-    return(solve_CGLS(A, b, x0 = x0, tol = tol, iter = iter, verbose = verbose))
-  # if(type == "CG")
-  return(solve_CGLS(A, b, x0 = x0, tol = tol, iter = iter, verbose = verbose))
+  if(is_matrix) { # Dense
+    if(pivot) {
+      return(solve_CPHQR(a, b))
+    } else {
+      return(solve_HQR(a, b))
+    }
+  } else { # Sparse
+    if(pivot) {
+      return(solve_SQR(a, b))
+    } else {
+      stop("No sparse solver without pivoting is available.")
+    }
+  }
 }

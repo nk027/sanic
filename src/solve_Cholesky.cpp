@@ -6,10 +6,10 @@
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_LLT(
-  Eigen::Map<Eigen::MatrixXd> A, 
+  Eigen::Map<Eigen::MatrixXd> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-  
-  Eigen::LLT<Eigen::MatrixXd> chol(A);
+
+  Eigen::LLT<Eigen::MatrixXd> chol(a);
   Eigen::MatrixXd x = chol.solve(b);
 
   return x;
@@ -18,10 +18,10 @@ Eigen::MatrixXd solve_LLT(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_LDLT(
-  Eigen::Map<Eigen::MatrixXd> A, 
+  Eigen::Map<Eigen::MatrixXd> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-  
-  Eigen::LDLT<Eigen::MatrixXd> chol(A);
+
+  Eigen::LDLT<Eigen::MatrixXd> chol(a);
   Eigen::MatrixXd x = chol.solve(b);
 
   return x;
@@ -30,10 +30,10 @@ Eigen::MatrixXd solve_LDLT(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_SLLT(
-  Eigen::MappedSparseMatrix<double> A,
+  Eigen::MappedSparseMatrix<double> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-  
-  Eigen::SimplicialLLT<Eigen::SparseMatrix<double> > chol(A);
+
+  Eigen::SimplicialLLT<Eigen::SparseMatrix<double> > chol(a);
   Eigen::MatrixXd x = chol.solve(b);
 
   return x;
@@ -42,10 +42,10 @@ Eigen::MatrixXd solve_SLLT(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_SLDLT(
-  Eigen::MappedSparseMatrix<double> A,
+  Eigen::MappedSparseMatrix<double> a,
   Eigen::Map<Eigen::MatrixXd> b) {
-  
-  Eigen::SimplicialLDLT<Eigen::SparseMatrix<double> > chol(A);
+
+  Eigen::SimplicialLDLT<Eigen::SparseMatrix<double> > chol(a);
   Eigen::MatrixXd x = chol.solve(b);
 
   return x;

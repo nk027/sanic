@@ -7,7 +7,7 @@
 solve_cg(
   A,
   b,
-  type = c("BiCGSTAB", "TNBiCGSTAB", "LSCG", "CG"),
+  type = c("BiCGSTAB", "LSCG", "CG"),
   x0,
   tol,
   iter,

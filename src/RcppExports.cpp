@@ -114,22 +114,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// solve_DTNSBCGST
-Eigen::MatrixXd solve_DTNSBCGST(Eigen::MappedSparseMatrix<double> A, Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0, double tol, int iter, bool verbose);
-RcppExport SEXP _sanic_solve_DTNSBCGST(SEXP ASEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type A(ASEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type x0(x0SEXP);
-    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
-    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_DTNSBCGST(A, b, x0, tol, iter, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
 // solve_BCGST
 Eigen::MatrixXd solve_BCGST(Eigen::MappedSparseMatrix<double> A, Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0, double tol, int iter, bool verbose);
 RcppExport SEXP _sanic_solve_BCGST(SEXP ASEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP verboseSEXP) {
@@ -189,7 +173,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sanic_solve_HQR", (DL_FUNC) &_sanic_solve_HQR, 2},
     {"_sanic_solve_CPHQR", (DL_FUNC) &_sanic_solve_CPHQR, 2},
     {"_sanic_solve_SQR", (DL_FUNC) &_sanic_solve_SQR, 2},
-    {"_sanic_solve_DTNSBCGST", (DL_FUNC) &_sanic_solve_DTNSBCGST, 6},
     {"_sanic_solve_BCGST", (DL_FUNC) &_sanic_solve_BCGST, 6},
     {"_sanic_solve_CGLS", (DL_FUNC) &_sanic_solve_CGLS, 6},
     {"_sanic_solve_CG", (DL_FUNC) &_sanic_solve_CG, 6},
