@@ -1,5 +1,5 @@
 
-#' @title Solve a System of Equations Using Direct Methods
+#' Solve a System of Equations Using Direct Methods
 #'
 #' Functions to access specific direct solvers for systems of equations.
 #'

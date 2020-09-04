@@ -1,5 +1,5 @@
 
-#' @title Solve a System of Equations using Iterative Methods
+#' Solve a System of Equations using Iterative Methods
 #'
 #' Functions to access specific iterative solvers for systems of equations.
 #'

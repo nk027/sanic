@@ -9,15 +9,13 @@ Authors@R: c(person("Nikolas", "Kuschnig", role = c("aut", "cre"),
 Author: Nikolas Kuschnig [aut, cre]  (<https://orcid.org/0000-0002-6642-2543>)
 Maintainer: Nikolas Kuschnig <nikolas.kuschnig@wu.ac.at>
 Description: Routines for solving large systems of linear equations in R.
-  Makes direct and iterative solvers from the Eigen C++ library available.
-  Includes Cholesky, LU, QR, and Krylov subspace (Conjugate Gradient, BiCGSTAB)
-  methods. Both dense and sparse problems are supported.
+  Direct and iterative solvers from the Eigen C++ library are made available.
+  Solvers include Cholesky, LU, QR, and Krylov subspace (Conjugate Gradient,
+  BiCGSTAB) methods. Both dense and sparse problems are supported.
 URL: https://github.com/nk027/sanic
 BugReports: https://github.com/nk027/sanic/issues
 Depends: R (>= 3.3.0)
 Imports: Rcpp (>= 1.0.5), Matrix, methods
-Suggests: knitr
-VignetteBuilder: knitr
 License: GPL-3
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppEigen

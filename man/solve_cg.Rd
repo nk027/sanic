@@ -2,9 +2,7 @@
 % Please edit documentation in R/solve_iterative.R
 \name{solve_cg}
 \alias{solve_cg}
-\title{Solve a System of Equations using Iterative Methods
-
-Functions to access specific iterative solvers for systems of equations.}
+\title{Solve a System of Equations using Iterative Methods}
 \usage{
 solve_cg(
   a,
@@ -38,8 +36,6 @@ inverted.}
 Solves for \eqn{x} and returns a numeric matrix with the results.
 }
 \description{
-Solve a System of Equations using Iterative Methods
-
 Functions to access specific iterative solvers for systems of equations.
 }
 \examples{

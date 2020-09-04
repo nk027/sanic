@@ -4,9 +4,7 @@
 \alias{solve_chol}
 \alias{solve_lu}
 \alias{solve_qr}
-\title{Solve a System of Equations Using Direct Methods
-
-Functions to access specific direct solvers for systems of equations.}
+\title{Solve a System of Equations Using Direct Methods}
 \usage{
 solve_chol(a, b, type = c("LDLT", "LLT"))
 
@@ -30,8 +28,6 @@ inverted.}
 Solves for \eqn{x} and returns a numeric matrix with the results.
 }
 \description{
-Solve a System of Equations Using Direct Methods
-
 Functions to access specific direct solvers for systems of equations.
 }
 \examples{
