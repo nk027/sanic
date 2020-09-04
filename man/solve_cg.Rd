@@ -46,6 +46,8 @@ equations.
 \examples{
 # Solve via least squares or bi-conjugate gradient methods
 A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+# The matrix A should be of class 'dgCMatrix' (otherwise it is converted)
+A <- sparsify(A)
 x <- rnorm(3)
 b  <- A \%*\% x
 
@@ -53,7 +55,7 @@ x_bi <- solve_cg(A, b)
 x_ls <- solve_cg(A, b, type = "LS")
 
 # Solve via conjugate gradient for symmetric matrices
-AA <- crossprod(A)
+AA <- A \%*\% A
 b <- AA \%*\% x
 x_cg <- solve_cg(AA, b, type = "CG")
 

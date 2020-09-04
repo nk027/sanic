@@ -40,6 +40,7 @@ solve_chol <- function(a, b) {
   }
 
   if(missing(b)) {b <- diag(dim(a)[1L])} else { # Invert without b
+    if(inherits(b, "Matrix")) {b <- as.matrix(b)}
     if(!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
       stop("Please provide 'b' as a numeric vector or matrix.")
     }
@@ -68,6 +69,7 @@ solve_lu <- function(a, b) {
   }
 
   if(missing(b)) {b <- diag(dim(a)[1L])} else { # Invert without b
+    if(inherits(b, "Matrix")) {b <- as.matrix(b)}
     if(!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
       stop("Please provide 'b' as a numeric vector or matrix.")
     }
@@ -96,6 +98,7 @@ solve_qr <- function(a, b) {
   }
 
   if(missing(b)) {b <- diag(dim(a)[1L])} else { # Invert without b
+    if(inherits(b, "Matrix")) {b <- as.matrix(b)}
     if(!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
       stop("Please provide 'b' as a numeric vector or matrix.")
     }

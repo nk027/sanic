@@ -21,6 +21,8 @@
 #' @examples
 #' # Solve via least squares or bi-conjugate gradient methods
 #' A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+#' # The matrix A should be of class 'dgCMatrix' (otherwise it is converted)
+#' A <- sparsify(A)
 #' x <- rnorm(3)
 #' b  <- A %*% x
 #'
@@ -28,7 +30,7 @@
 #' x_ls <- solve_cg(A, b, type = "LS")
 #'
 #' # Solve via conjugate gradient for symmetric matrices
-#' AA <- crossprod(A)
+#' AA <- A %*% A
 #' b <- AA %*% x
 #' x_cg <- solve_cg(AA, b, type = "CG")
 #'
@@ -44,6 +46,7 @@ solve_cg <- function(a, b, x0,
   if(!is_sparse) {stop("Please provide 'a' as sparse 'dgCMatrix'.")}
 
   if(missing(b)) {b <- diag(dim(a)[1L])} else { # Invert without b
+    if(inherits(b, "Matrix")) {b <- as.matrix(b)}
     if(!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
       stop("Please provide 'b' as a numeric vector or matrix.")
     }
