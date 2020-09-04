@@ -78,18 +78,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// solve_HQR
-Eigen::MatrixXd solve_HQR(Eigen::Map<Eigen::MatrixXd> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_HQR(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_HQR(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
 // solve_CPHQR
 Eigen::MatrixXd solve_CPHQR(Eigen::Map<Eigen::MatrixXd> a, Eigen::Map<Eigen::MatrixXd> b);
 RcppExport SEXP _sanic_solve_CPHQR(SEXP aSEXP, SEXP bSEXP) {
@@ -170,7 +158,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sanic_solve_SLDLT", (DL_FUNC) &_sanic_solve_SLDLT, 2},
     {"_sanic_solve_PPLU", (DL_FUNC) &_sanic_solve_PPLU, 2},
     {"_sanic_solve_SLU", (DL_FUNC) &_sanic_solve_SLU, 2},
-    {"_sanic_solve_HQR", (DL_FUNC) &_sanic_solve_HQR, 2},
     {"_sanic_solve_CPHQR", (DL_FUNC) &_sanic_solve_CPHQR, 2},
     {"_sanic_solve_SQR", (DL_FUNC) &_sanic_solve_SQR, 2},
     {"_sanic_solve_BiCGSTAB", (DL_FUNC) &_sanic_solve_BiCGSTAB, 6},

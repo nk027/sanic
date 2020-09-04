@@ -10,10 +10,7 @@
 #' @param tol Tolerance
 #' @param verbose Whether to print iterations and tolerance
 #'
-#' @returns Solves for \eqn{x} and returns a numeric matrix with the results.
-#'
-#' @importFrom Matrix Matrix
-#' @importFrom methods as
+#' @return Solves for \eqn{x} and returns a numeric matrix with the results.
 #'
 #' @export
 #' @examples

@@ -5,18 +5,6 @@
 
 
 // [[Rcpp::export]]
-Eigen::MatrixXd solve_HQR(
-  Eigen::Map<Eigen::MatrixXd> a,
-  Eigen::Map<Eigen::MatrixXd> b) {
-
-  Eigen::HouseholderQR<Eigen::MatrixXd> qr(a);
-  Eigen::MatrixXd x = qr.solve(b);
-
-  return x;
-}
-
-
-// [[Rcpp::export]]
 Eigen::MatrixXd solve_CPHQR(
   Eigen::Map<Eigen::MatrixXd> a,
   Eigen::Map<Eigen::MatrixXd> b) {

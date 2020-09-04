@@ -10,7 +10,7 @@ solve_chol(a, b, type = c("LDLT", "LLT"))
 
 solve_lu(a, b)
 
-solve_qr(a, b, pivot = TRUE)
+solve_qr(a, b)
 }
 \arguments{
 \item{a}{Square numeric matrix with the coefficients of the linear system.
@@ -21,8 +21,6 @@ system. If missing, 'b' is set to an identity matrix and 'a' is
 inverted.}
 
 \item{type}{Character scalar. Whether to decompose 'a' as LDLT or LLT.}
-
-\item{pivot}{Logical scalar. Whether to perform column pivoting.}
 }
 \value{
 Solves for \eqn{x} and returns a numeric matrix with the results.

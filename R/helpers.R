@@ -8,6 +8,9 @@
 #'
 #' @return Returns 'x' as \code{dgCMatrix}.
 #'
+#' @importFrom Matrix Matrix
+#' @importFrom methods as
+#'
 #' @export
 #' @examples
 #' sparsify(matrix(rnorm(9L), 3L))
@@ -20,6 +23,8 @@ sparsify <- function(x) {
 #' @param x Matrix or something else with dimensions.
 #'
 #' @return Returns a logical scalar indicating squarity.
+#'
+#' @noRd
 is_square <- function(x) {
   isTRUE(diff(dim(x)) == 0L)
 }

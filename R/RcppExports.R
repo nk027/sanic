@@ -25,10 +25,6 @@ solve_SLU <- function(a, b) {
     .Call('_sanic_solve_SLU', PACKAGE = 'sanic', a, b)
 }
 
-solve_HQR <- function(a, b) {
-    .Call('_sanic_solve_HQR', PACKAGE = 'sanic', a, b)
-}
-
 solve_CPHQR <- function(a, b) {
     .Call('_sanic_solve_CPHQR', PACKAGE = 'sanic', a, b)
 }

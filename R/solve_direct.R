@@ -9,9 +9,8 @@
 #' system. If missing, 'b' is set to an identity matrix and 'a' is
 #' inverted.
 #' @param type Character scalar. Whether to decompose 'a' as LDLT or LLT.
-#' @param pivot Logical scalar. Whether to perform column pivoting.
 #'
-#' @returns Solves for \eqn{x} and returns a numeric matrix with the results.
+#' @return Solves for \eqn{x} and returns a numeric matrix with the results.
 #'
 #' @export
 #' @examples
@@ -98,7 +97,7 @@ solve_lu <- function(a, b) {
 
 #' @rdname solve_chol
 #' @export
-solve_qr <- function(a, b, pivot = TRUE) {
+solve_qr <- function(a, b) {
 
   # Checks -----
   is_matrix <- is.matrix(a)
@@ -117,20 +116,10 @@ solve_qr <- function(a, b, pivot = TRUE) {
   is_fitting <- dim(a)[1L] - b_rows == 0L
   if(!is_fitting) {stop("Both 'a' and 'b' must have the same number of rows.")}
 
-  pivot <- isTRUE(pivot)
-
   # Execute -----
   if(is_matrix) { # Dense
-    if(pivot) {
-      return(solve_CPHQR(a, b))
-    } else {
-      return(solve_HQR(a, b))
-    }
+    return(solve_CPHQR(a, b))
   } else { # Sparse
-    if(pivot) {
       return(solve_SQR(a, b))
-    } else {
-      stop("No sparse solver without pivoting is available.")
-    }
   }
 }
