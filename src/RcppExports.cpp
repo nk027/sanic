@@ -6,18 +6,6 @@
 
 using namespace Rcpp;
 
-// solve_LLT
-Eigen::MatrixXd solve_LLT(Eigen::Map<Eigen::MatrixXd> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_LLT(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_LLT(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
 // solve_LDLT
 Eigen::MatrixXd solve_LDLT(Eigen::Map<Eigen::MatrixXd> a, Eigen::Map<Eigen::MatrixXd> b);
 RcppExport SEXP _sanic_solve_LDLT(SEXP aSEXP, SEXP bSEXP) {
@@ -27,18 +15,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
     Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(solve_LDLT(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// solve_SLLT
-Eigen::MatrixXd solve_SLLT(Eigen::MappedSparseMatrix<double> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_SLLT(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_SLLT(a, b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -152,9 +128,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_sanic_solve_LLT", (DL_FUNC) &_sanic_solve_LLT, 2},
     {"_sanic_solve_LDLT", (DL_FUNC) &_sanic_solve_LDLT, 2},
-    {"_sanic_solve_SLLT", (DL_FUNC) &_sanic_solve_SLLT, 2},
     {"_sanic_solve_SLDLT", (DL_FUNC) &_sanic_solve_SLDLT, 2},
     {"_sanic_solve_PPLU", (DL_FUNC) &_sanic_solve_PPLU, 2},
     {"_sanic_solve_SLU", (DL_FUNC) &_sanic_solve_SLU, 2},

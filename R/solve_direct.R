@@ -8,7 +8,6 @@
 #' @param b Numeric vector or matrix at the right-hand side of the linear
 #' system. If missing, 'b' is set to an identity matrix and 'a' is
 #' inverted.
-#' @param type Character scalar. Whether to decompose 'a' as LDLT or LLT.
 #'
 #' @return Solves for \eqn{x} and returns a numeric matrix with the results.
 #'
@@ -31,11 +30,9 @@
 #' # Sparse methods are available for the 'dgCMatrix' class from Matrix
 #' x_slu <- solve_lu(sparsify(A), b)
 #'
-solve_chol <- function(a, b, type = c("LDLT", "LLT")) {
+solve_chol <- function(a, b) {
 
   # Checks -----
-  type <- match.arg(type)
-
   is_matrix <- is.matrix(a)
   is_sparse <- inherits(a, "dgCMatrix")
   if(!is_matrix && !is_sparse) {
@@ -52,17 +49,9 @@ solve_chol <- function(a, b, type = c("LDLT", "LLT")) {
 
   # Execute -----
   if(is_matrix) { # Dense
-    if(type == "LDLT") {
-      return(solve_LDLT(a, b))
-    } else {
-      return(solve_LLT(a, b))
-    }
+    return(solve_LDLT(a, b))
   } else { # Sparse
-    if(type == "LDLT") {
-      return(solve_SLDLT(a, b))
-    } else {
-      return(solve_SLLT(a, b))
-    }
+    return(solve_SLDLT(a, b))
   }
 }
 

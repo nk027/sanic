@@ -6,7 +6,7 @@
 \alias{solve_qr}
 \title{Solve a System of Equations Using Direct Methods}
 \usage{
-solve_chol(a, b, type = c("LDLT", "LLT"))
+solve_chol(a, b)
 
 solve_lu(a, b)
 
@@ -19,8 +19,6 @@ Both dense and sparse matrices are supported (see \link{sparsify}).}
 \item{b}{Numeric vector or matrix at the right-hand side of the linear
 system. If missing, 'b' is set to an identity matrix and 'a' is
 inverted.}
-
-\item{type}{Character scalar. Whether to decompose 'a' as LDLT or LLT.}
 }
 \value{
 Solves for \eqn{x} and returns a numeric matrix with the results.

@@ -22,21 +22,26 @@ Both dense and sparse matrices are supported (see \link{sparsify}).}
 system. If missing, 'b' is set to an identity matrix and 'a' is
 inverted.}
 
-\item{x0}{Initial guess}
+\item{x0}{Numeric vector or matrix with an initial guess. Must be of the
+same dimension as 'b'.}
 
-\item{type}{Whether to use the BiCGSTAB, least squares CG or CG solver}
+\item{type}{Character scalar. Whether to use the BiCGSTAB, least squares
+CG or classic CG method.}
 
-\item{tol}{Tolerance}
+\item{tol}{Numeric scalar with the desired tolerance. Defaults to the
+machine precision.}
 
-\item{iter}{Iterations}
+\item{iter}{Integer scalar with the maximum number of iterations. Defaults
+to the theoretical maximum, i.e. the number of columns in 'a'.}
 
-\item{verbose}{Whether to print iterations and tolerance}
+\item{verbose}{Logical scalar. Whether to print iterations and tolerance.}
 }
 \value{
 Solves for \eqn{x} and returns a numeric matrix with the results.
 }
 \description{
-Functions to access specific iterative solvers for systems of equations.
+Function to use Conjugate Gradient (CG) methods to solver systems of
+equations.
 }
 \examples{
 # Solve via least squares or bi-conjugate gradient methods

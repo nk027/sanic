@@ -2,10 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{sparsify}
 \alias{sparsify}
-\title{Transform a Matrix to Be Sparse.
-
-Concise function to transform dense to sparse matrices of class
-\code{dgCMatrix} (see \link[Matrix]{sparseMatrix}).}
+\title{Transform a Matrix to Be Sparse.}
 \usage{
 sparsify(x)
 }
@@ -16,8 +13,6 @@ sparsify(x)
 Returns 'x' as \code{dgCMatrix}.
 }
 \description{
-Transform a Matrix to Be Sparse.
-
 Concise function to transform dense to sparse matrices of class
 \code{dgCMatrix} (see \link[Matrix]{sparseMatrix}).
 }

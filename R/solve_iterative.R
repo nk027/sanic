@@ -1,14 +1,19 @@
 
 #' Solve a System of Equations using Iterative Methods
 #'
-#' Functions to access specific iterative solvers for systems of equations.
+#' Function to use Conjugate Gradient (CG) methods to solver systems of
+#' equations.
 #'
 #' @inheritParams solve_chol
-#' @param type Whether to use the BiCGSTAB, least squares CG or CG solver
-#' @param x0 Initial guess
-#' @param iter Iterations
-#' @param tol Tolerance
-#' @param verbose Whether to print iterations and tolerance
+#' @param type Character scalar. Whether to use the BiCGSTAB, least squares
+#' CG or classic CG method.
+#' @param x0 Numeric vector or matrix with an initial guess. Must be of the
+#' same dimension as 'b'.
+#' @param iter Integer scalar with the maximum number of iterations. Defaults
+#' to the theoretical maximum, i.e. the number of columns in 'a'.
+#' @param tol Numeric scalar with the desired tolerance. Defaults to the
+#' machine precision.
+#' @param verbose Logical scalar. Whether to print iterations and tolerance.
 #'
 #' @return Solves for \eqn{x} and returns a numeric matrix with the results.
 #'

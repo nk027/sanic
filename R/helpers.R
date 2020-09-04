@@ -1,5 +1,5 @@
 
-#' @title Transform a Matrix to Be Sparse.
+#' Transform a Matrix to Be Sparse.
 #'
 #' Concise function to transform dense to sparse matrices of class
 #' \code{dgCMatrix} (see \link[Matrix]{sparseMatrix}).
@@ -18,7 +18,7 @@ sparsify <- function(x) {
   return(as(x, "dgCMatrix"))
 }
 
-#' @title Check Squarity
+#' Check Squarity
 #'
 #' @param x Matrix or something else with dimensions.
 #'
