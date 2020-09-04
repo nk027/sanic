@@ -7,9 +7,9 @@ Routines for solving large systems of linear equations in **R**. Direct and iter
 
 Solver | Notes | Sparse method | Reference
 --- | --- | --- | ---
-LU decomposition | Partial pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseLU)
-Householder QR decomposition | Column pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ColPivHouseholderQR), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1HouseholderQR), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR)
-Cholesky decomposition | Robust with pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LDLT), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLDLT)
-Conjugate Gradient (CG) | Symmetric problems | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient)
-Least Squares (LS) CG | Rectangular LS problems | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LeastSquaresConjugateGradient)
-Biconjugate gradient stabilised | Square problems | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BiCGSTAB)
+LU decomposition | Partial pivoting, blocking | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseLU)
+Householder QR decomposition | Column pivoting, good reliability | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ColPivHouseholderQR), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1HouseholderQR), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR)
+Cholesky decomposition | Semidefinite symmetric problems, pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LDLT), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLDLT)
+Conjugate Gradient (CG) | Symmetric problems, Jacobi preconditioner | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient)
+Least Squares (LS) CG | Rectangular LS problems, LS Jacobi preconditioner | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LeastSquaresConjugateGradient)
+Biconjugate gradient stabilised | Square problems, Jacobi preconditioner | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BiCGSTAB)
