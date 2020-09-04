@@ -3,8 +3,9 @@
 \docType{package}
 \name{sanic}
 \alias{sanic}
-\title{Solving Ax = b Nimbly in C++
-
-Fast routines for solving large systems of linear equations in R. Makes
-Eigen's Cholesky-, LU-, QR-, and iterative (Conjugate Gradient, BiCGSTAB)
-solvers for both dense and sparse problems available.}
+\title{Solving Ax = b Nimbly in C++}
+\description{
+Fast routines for solving large systems of linear equations in
+R. Makes Eigen's Cholesky-, LU-, QR-, and iterative (Conjugate Gradient,
+BiCGSTAB) solvers for both dense and sparse problems available.
+}

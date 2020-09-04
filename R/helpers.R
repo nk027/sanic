@@ -1,24 +1,4 @@
 
-#' @title The Way
-#'
-#' @param x Matrix or something.
-#'
-#' @return
-the_way <- function(x) {
-
-  is_square(x)
-  is.complex(x)
-  is.finite(x)
-  isSymmetric.matrix(x)
-
-  # Consider Sparsity (`coop::sparsity()`)
-  # Direct | Iterative
-  # Cholesky > LU > QR
-  # Diagonal dominance?
-
-  # More: Spectral and SV decompositions, more pivoting, stationary solvers
-}
-
 #' @title Transform a Matrix to Be Sparse.
 #'
 #' Concise function to transform dense to sparse matrices of class

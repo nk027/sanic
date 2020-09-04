@@ -4,7 +4,9 @@
 \alias{solve_chol}
 \alias{solve_lu}
 \alias{solve_qr}
-\title{Solve a System of Equations Using Direct Methods}
+\title{Solve a System of Equations Using Direct Methods
+
+Functions to access specific direct solvers for systems of equations.}
 \usage{
 solve_chol(a, b, type = c("LDLT", "LLT"))
 
@@ -29,7 +31,25 @@ Solves for \eqn{x} and returns a numeric matrix with the results.
 }
 \description{
 Solve a System of Equations Using Direct Methods
+
+Functions to access specific direct solvers for systems of equations.
 }
 \examples{
-solve_chol(crossprod(matrix(rnorm(9), 3)), rnorm(3))
+# Solve via LU and QR for general matrices
+A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+x <- rnorm(3)
+b  <- A \%*\% x
+
+x_lu <- solve_lu(A, b)
+x_qr <- solve_qr(A, b)
+
+# Solve via Cholesky for symmetric matrices
+AA <- crossprod(A)
+b <- AA \%*\% x
+
+x_chol <- solve_chol(AA, b)
+
+# Sparse methods are available for the 'dgCMatrix' class from Matrix
+x_slu <- solve_lu(sparsify(A), b)
+
 }

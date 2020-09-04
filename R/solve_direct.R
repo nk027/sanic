@@ -1,7 +1,7 @@
 
 #' @title Solve a System of Equations Using Direct Methods
 #'
-#'
+#' Functions to access specific direct solvers for systems of equations.
 #'
 #' @param a Square numeric matrix with the coefficients of the linear system.
 #' Both dense and sparse matrices are supported (see \link{sparsify}).
@@ -15,7 +15,23 @@
 #'
 #' @export
 #' @examples
-#' solve_chol(crossprod(matrix(rnorm(9), 3)), rnorm(3))
+#' # Solve via LU and QR for general matrices
+#' A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+#' x <- rnorm(3)
+#' b  <- A %*% x
+#'
+#' x_lu <- solve_lu(A, b)
+#' x_qr <- solve_qr(A, b)
+#'
+#' # Solve via Cholesky for symmetric matrices
+#' AA <- crossprod(A)
+#' b <- AA %*% x
+#'
+#' x_chol <- solve_chol(AA, b)
+#'
+#' # Sparse methods are available for the 'dgCMatrix' class from Matrix
+#' x_slu <- solve_lu(sparsify(A), b)
+#'
 solve_chol <- function(a, b, type = c("LDLT", "LLT")) {
 
   # Checks -----
@@ -53,6 +69,7 @@ solve_chol <- function(a, b, type = c("LDLT", "LLT")) {
 
 
 #' @rdname solve_chol
+#' @export
 solve_lu <- function(a, b) {
 
   # Checks -----
@@ -80,6 +97,7 @@ solve_lu <- function(a, b) {
 
 
 #' @rdname solve_chol
+#' @export
 solve_qr <- function(a, b, pivot = TRUE) {
 
   # Checks -----
@@ -96,7 +114,7 @@ solve_qr <- function(a, b, pivot = TRUE) {
   }
 
   b_rows <- if(is.null(dim(b))) {length(b)} else {dim(b)[1L]}
-  is_fitting <- diff(dim(a)[1L], b_rows) == 0L
+  is_fitting <- dim(a)[1L] - b_rows == 0L
   if(!is_fitting) {stop("Both 'a' and 'b' must have the same number of rows.")}
 
   pivot <- isTRUE(pivot)

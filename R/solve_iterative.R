@@ -1,7 +1,7 @@
 
 #' @title Solve a System of Equations using Iterative Methods
 #'
-#'
+#' Functions to access specific iterative solvers for systems of equations.
 #'
 #' @inheritParams solve_chol
 #' @param type Whether to use the BiCGSTAB, least squares CG or CG solver
@@ -17,7 +17,19 @@
 #'
 #' @export
 #' @examples
-#' solve_cg(matrix(rnorm(9), 3), rnorm(3))
+#' # Solve via least squares or bi-conjugate gradient methods
+#' A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+#' x <- rnorm(3)
+#' b  <- A %*% x
+#'
+#' x_bi <- solve_cg(A, b)
+#' x_ls <- solve_cg(A, b, type = "LS")
+#'
+#' # Solve via conjugate gradient for symmetric matrices
+#' AA <- crossprod(A)
+#' b <- AA %*% x
+#' x_cg <- solve_cg(AA, b, type = "CG")
+#'
 solve_cg <- function(a, b, x0,
   type = c("BiCGSTAB", "LSCG", "CG"),
   tol, iter, verbose = FALSE) {
@@ -41,7 +53,7 @@ solve_cg <- function(a, b, x0,
 
   if(!missing(x0)) { # Gotta check it
     if(!is.numeric(x0) || (!is.vector(x0) && !is.matrix(x0)) ||
-      !all(class(y) == class(x0))) {
+      !all(class(b) == class(x0))) {
       stop("Please provide the guess 'x0' as 'a' numeric vector or matrix.")
     }
   } else { # Construct it

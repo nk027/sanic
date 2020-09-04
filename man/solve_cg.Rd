@@ -2,7 +2,9 @@
 % Please edit documentation in R/solve_iterative.R
 \name{solve_cg}
 \alias{solve_cg}
-\title{Solve a System of Equations using Iterative Methods}
+\title{Solve a System of Equations using Iterative Methods
+
+Functions to access specific iterative solvers for systems of equations.}
 \usage{
 solve_cg(
   a,
@@ -37,7 +39,21 @@ Solves for \eqn{x} and returns a numeric matrix with the results.
 }
 \description{
 Solve a System of Equations using Iterative Methods
+
+Functions to access specific iterative solvers for systems of equations.
 }
 \examples{
-solve_cg(matrix(rnorm(9), 3), rnorm(3))
+# Solve via least squares or bi-conjugate gradient methods
+A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+x <- rnorm(3)
+b  <- A \%*\% x
+
+x_bi <- solve_cg(A, b)
+x_ls <- solve_cg(A, b, type = "LS")
+
+# Solve via conjugate gradient for symmetric matrices
+AA <- crossprod(A)
+b <- AA \%*\% x
+x_cg <- solve_cg(AA, b, type = "CG")
+
 }

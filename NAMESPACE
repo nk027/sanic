@@ -2,6 +2,8 @@
 
 export(solve_cg)
 export(solve_chol)
+export(solve_lu)
+export(solve_qr)
 export(sparsify)
 importFrom(Matrix,Matrix)
 importFrom(Rcpp,sourceCpp)

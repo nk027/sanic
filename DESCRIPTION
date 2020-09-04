@@ -3,14 +3,21 @@ Type: Package
 Title: Solving Ax = b Nimbly in C++
 Version: 0.0.1
 Date: 2020-09-01
-Authors@R: c(person("Nikolas", "Kuschnig", role = c("aut", "cre"), email = "nikolas.kuschnig@wu.ac.at", comment = c(ORCID = "0000-0002-6642-2543")))
+Authors@R: c(person("Nikolas", "Kuschnig", role = c("aut", "cre"),
+  email = "nikolas.kuschnig@wu.ac.at",
+  comment = c(ORCID = "0000-0002-6642-2543")))
 Author: Nikolas Kuschnig [aut, cre]  (<https://orcid.org/0000-0002-6642-2543>)
 Maintainer: Nikolas Kuschnig <nikolas.kuschnig@wu.ac.at>
-Description: Fast routines for solving large systems of linear equations in R. Makes Eigen's Cholesky-, LU-, QR-, and iterative (Conjugate Gradient, BiCGSTAB) solvers for both dense and sparse problems available.
+Description: Routines for solving large systems of linear equations in R.
+  Makes direct and iterative solvers from the Eigen C++ library available.
+  Includes Cholesky, LU, QR, and Krylov subspace (Conjugate Gradient, BiCGSTAB)
+  methods. Both dense and sparse problems are supported.
 URL: https://github.com/nk027/sanic
 BugReports: https://github.com/nk027/sanic/issues
 Depends: R (>= 3.3.0)
 Imports: Rcpp (>= 1.0.5), Matrix, methods
+Suggests: knitr
+VignetteBuilder: knitr
 License: GPL-3
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppEigen
