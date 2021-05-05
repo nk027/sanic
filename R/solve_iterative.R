@@ -9,6 +9,8 @@
 #' CG or classic CG method.
 #' @param x0 Numeric vector or matrix with an initial guess. Must be of the
 #' same dimension as 'b'.
+#' @param precond Integer scalar indicating the type of preconditioner to be
+#' used. See the Details for further information.
 #' @param iter Integer scalar with the maximum number of iterations. Defaults
 #' to the theoretical maximum, i.e. the number of columns in 'a'.
 #' @param tol Numeric scalar with the desired tolerance. Defaults to the

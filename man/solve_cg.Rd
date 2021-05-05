@@ -35,6 +35,9 @@ machine precision.}
 to the theoretical maximum, i.e. the number of columns in 'a'.}
 
 \item{verbose}{Logical scalar. Whether to print iterations and tolerance.}
+
+\item{precond}{Integer scalar indicating the type of preconditioner to be
+used. See the Details for further information.}
 }
 \value{
 Solves for \eqn{x} and returns a numeric matrix with the results.

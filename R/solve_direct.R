@@ -8,6 +8,10 @@
 #' @param b Numeric vector or matrix at the right-hand side of the linear
 #' system. If missing, 'b' is set to an identity matrix and 'a' is
 #' inverted.
+#' @param pivot Integer scalar indicating the pivoting scheme to be used.
+#' See the Details for further information.
+#' @param ordering Integer scalar indicating the ordering scheme to be used.
+#' See the Details for further information.
 #'
 #' @return Solves for \eqn{x} and returns a numeric matrix with the results.
 #'
@@ -30,11 +34,13 @@
 #' # Sparse methods are available for the 'dgCMatrix' class from Matrix
 #' x_slu <- solve_lu(sparsify(A), b)
 #'
-solve_chol <- function(a, b) {
+solve_chol <- function(a, b, pivot = 1L, ordering = 0L) {
 
   # Checks -----
   is_matrix <- is.matrix(a)
   is_sparse <- inherits(a, "dgCMatrix")
+  pivot <- int_check(pivot, 0L, 1L)
+  ordering <- int_check(ordering, 0L, 1L)
   if(!is_matrix && !is_sparse) {
     stop("Please provide 'a' as matrix (or sparse 'dgCMatrix').")
   }
@@ -50,20 +56,22 @@ solve_chol <- function(a, b) {
 
   # Execute -----
   if(is_matrix) { # Dense
-    return(solve_LDLT(a, b))
+    return(solve_LLT(a, b, pivot = pivot))
   } else { # Sparse
-    return(solve_SLDLT(a, b))
+    return(solve_SLLT(a, b, pivot = pivot, ordering = ordering))
   }
 }
 
 
 #' @rdname solve_chol
 #' @export
-solve_lu <- function(a, b) {
+solve_lu <- function(a, b, pivot = 0L, ordering = 0L) {
 
   # Checks -----
   is_matrix <- is.matrix(a)
   is_sparse <- inherits(a, "dgCMatrix")
+  pivot <- int_check(pivot, 0L, 1L)
+  ordering <- int_check(ordering, 0L, 2L)
   if(!is_matrix && !is_sparse) {
     stop("Please provide 'a' as matrix (or sparse 'dgCMatrix').")
   }
@@ -79,20 +87,22 @@ solve_lu <- function(a, b) {
 
   # Execute -----
   if(is_matrix) { # Dense
-    return(solve_PPLU(a, b))
+    return(solve_LU(a, b, pivot = pivot))
   } else { # Sparse
-    return(solve_SLU(a, b))
+    return(solve_SLU(a, b, ordering = ordering))
   }
 }
 
 
 #' @rdname solve_chol
 #' @export
-solve_qr <- function(a, b) {
+solve_qr <- function(a, b, pivot = 1L, ordering = 0L) {
 
   # Checks -----
   is_matrix <- is.matrix(a)
   is_sparse <- inherits(a, "dgCMatrix")
+  pivot <- int_check(pivot, 0L, 1L)
+  ordering <- int_check(ordering, 0L, 2L)
   if(!is_matrix && !is_sparse) {
     stop("Please provide 'a' as matrix (or sparse 'dgCMatrix').")
   }
@@ -110,8 +120,8 @@ solve_qr <- function(a, b) {
 
   # Execute -----
   if(is_matrix) { # Dense
-    return(solve_CPHQR(a, b))
+    return(solve_HQR(a, b, pivot = pivot))
   } else { # Sparse
-      return(solve_SQR(a, b))
+    return(solve_SQR(a, b, ordering = ordering))
   }
 }

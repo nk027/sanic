@@ -6,137 +6,173 @@
 
 using namespace Rcpp;
 
-// solve_LDLT
-Eigen::MatrixXd solve_LDLT(Eigen::Map<Eigen::MatrixXd> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_LDLT(SEXP aSEXP, SEXP bSEXP) {
+// solve_LL
+Eigen::MatrixXd solve_LL(const Eigen::Map <Eigen::MatrixXd> a, const Eigen::Map <Eigen::MatrixXd> b, int pivot);
+RcppExport SEXP _sanic_solve_LL(SEXP aSEXP, SEXP bSEXP, SEXP pivotSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_LDLT(a, b));
+    Rcpp::traits::input_parameter< const Eigen::Map <Eigen::MatrixXd> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map <Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type pivot(pivotSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_LL(a, b, pivot));
     return rcpp_result_gen;
 END_RCPP
 }
-// solve_SLDLT
-Eigen::MatrixXd solve_SLDLT(Eigen::MappedSparseMatrix<double> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_SLDLT(SEXP aSEXP, SEXP bSEXP) {
+// solve_SLL
+Eigen::MatrixXd solve_SLL(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map<Eigen::MatrixXd> b, int pivot, int ordering);
+RcppExport SEXP _sanic_solve_SLL(SEXP aSEXP, SEXP bSEXP, SEXP pivotSEXP, SEXP orderingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_SLDLT(a, b));
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type pivot(pivotSEXP);
+    Rcpp::traits::input_parameter< int >::type ordering(orderingSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_SLL(a, b, pivot, ordering));
     return rcpp_result_gen;
 END_RCPP
 }
-// solve_PPLU
-Eigen::MatrixXd solve_PPLU(Eigen::Map<Eigen::MatrixXd> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_PPLU(SEXP aSEXP, SEXP bSEXP) {
+// solve_LU
+Eigen::MatrixXd solve_LU(const Eigen::Map <Eigen::MatrixXd> a, const Eigen::Map <Eigen::MatrixXd> b, int pivot);
+RcppExport SEXP _sanic_solve_LU(SEXP aSEXP, SEXP bSEXP, SEXP pivotSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_PPLU(a, b));
+    Rcpp::traits::input_parameter< const Eigen::Map <Eigen::MatrixXd> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map <Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type pivot(pivotSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_LU(a, b, pivot));
     return rcpp_result_gen;
 END_RCPP
 }
 // solve_SLU
-Eigen::MatrixXd solve_SLU(Eigen::MappedSparseMatrix<double> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_SLU(SEXP aSEXP, SEXP bSEXP) {
+Eigen::MatrixXd solve_SLU(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map<Eigen::MatrixXd> b, int ordering);
+RcppExport SEXP _sanic_solve_SLU(SEXP aSEXP, SEXP bSEXP, SEXP orderingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_SLU(a, b));
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type ordering(orderingSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_SLU(a, b, ordering));
     return rcpp_result_gen;
 END_RCPP
 }
-// solve_CPHQR
-Eigen::MatrixXd solve_CPHQR(Eigen::Map<Eigen::MatrixXd> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_CPHQR(SEXP aSEXP, SEXP bSEXP) {
+// solve_HQR
+Eigen::MatrixXd solve_HQR(const Eigen::Map<Eigen::MatrixXd> a, const Eigen::Map<Eigen::MatrixXd> b, int pivot);
+RcppExport SEXP _sanic_solve_HQR(SEXP aSEXP, SEXP bSEXP, SEXP pivotSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_CPHQR(a, b));
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type pivot(pivotSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_HQR(a, b, pivot));
     return rcpp_result_gen;
 END_RCPP
 }
 // solve_SQR
-Eigen::MatrixXd solve_SQR(Eigen::MappedSparseMatrix<double> a, Eigen::Map<Eigen::MatrixXd> b);
-RcppExport SEXP _sanic_solve_SQR(SEXP aSEXP, SEXP bSEXP) {
+Eigen::MatrixXd solve_SQR(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map<Eigen::MatrixXd> b, int ordering);
+RcppExport SEXP _sanic_solve_SQR(SEXP aSEXP, SEXP bSEXP, SEXP orderingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_SQR(a, b));
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type ordering(orderingSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_SQR(a, b, ordering));
     return rcpp_result_gen;
 END_RCPP
 }
 // solve_BiCGSTAB
-Eigen::MatrixXd solve_BiCGSTAB(Eigen::MappedSparseMatrix<double> a, Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0, double tol, int iter, bool verbose);
-RcppExport SEXP _sanic_solve_BiCGSTAB(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP verboseSEXP) {
+Eigen::MatrixXd solve_BiCGSTAB(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, int iter, int precond, bool verbose);
+RcppExport SEXP _sanic_solve_BiCGSTAB(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP precondSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type x0(x0SEXP);
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type x0(x0SEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< int >::type precond(precondSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_BiCGSTAB(a, b, x0, tol, iter, verbose));
+    rcpp_result_gen = Rcpp::wrap(solve_BiCGSTAB(a, b, x0, tol, iter, precond, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // solve_LSCG
-Eigen::VectorXd solve_LSCG(Eigen::MappedSparseMatrix<double> a, Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0, double tol, int iter, bool verbose);
-RcppExport SEXP _sanic_solve_LSCG(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP verboseSEXP) {
+Eigen::VectorXd solve_LSCG(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, int iter, int precond, bool verbose);
+RcppExport SEXP _sanic_solve_LSCG(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP precondSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type x0(x0SEXP);
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type x0(x0SEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< int >::type precond(precondSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_LSCG(a, b, x0, tol, iter, verbose));
+    rcpp_result_gen = Rcpp::wrap(solve_LSCG(a, b, x0, tol, iter, precond, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 // solve_CG
-Eigen::VectorXd solve_CG(Eigen::MappedSparseMatrix<double> a, Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0, double tol, int iter, int verbose);
-RcppExport SEXP _sanic_solve_CG(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP verboseSEXP) {
+Eigen::VectorXd solve_CG(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, int iter, int precond, bool verbose);
+RcppExport SEXP _sanic_solve_CG(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP precondSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
-    Rcpp::traits::input_parameter< Eigen::Map<Eigen::MatrixXd> >::type x0(x0SEXP);
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type x0(x0SEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
-    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_CG(a, b, x0, tol, iter, verbose));
+    Rcpp::traits::input_parameter< int >::type precond(precondSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_CG(a, b, x0, tol, iter, precond, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// is_symmetric2
+bool is_symmetric2(const Eigen::Map<Eigen::MatrixXd> x, double tol);
+RcppExport SEXP _sanic_is_symmetric2(SEXP xSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(is_symmetric2(x, tol));
+    return rcpp_result_gen;
+END_RCPP
+}
+// is_symmetric
+bool is_symmetric(const Eigen::Map<Eigen::MatrixXd> x, double tol);
+RcppExport SEXP _sanic_is_symmetric(SEXP xSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(is_symmetric(x, tol));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_sanic_solve_LDLT", (DL_FUNC) &_sanic_solve_LDLT, 2},
-    {"_sanic_solve_SLDLT", (DL_FUNC) &_sanic_solve_SLDLT, 2},
-    {"_sanic_solve_PPLU", (DL_FUNC) &_sanic_solve_PPLU, 2},
-    {"_sanic_solve_SLU", (DL_FUNC) &_sanic_solve_SLU, 2},
-    {"_sanic_solve_CPHQR", (DL_FUNC) &_sanic_solve_CPHQR, 2},
-    {"_sanic_solve_SQR", (DL_FUNC) &_sanic_solve_SQR, 2},
-    {"_sanic_solve_BiCGSTAB", (DL_FUNC) &_sanic_solve_BiCGSTAB, 6},
-    {"_sanic_solve_LSCG", (DL_FUNC) &_sanic_solve_LSCG, 6},
-    {"_sanic_solve_CG", (DL_FUNC) &_sanic_solve_CG, 6},
+    {"_sanic_solve_LL", (DL_FUNC) &_sanic_solve_LL, 3},
+    {"_sanic_solve_SLL", (DL_FUNC) &_sanic_solve_SLL, 4},
+    {"_sanic_solve_LU", (DL_FUNC) &_sanic_solve_LU, 3},
+    {"_sanic_solve_SLU", (DL_FUNC) &_sanic_solve_SLU, 3},
+    {"_sanic_solve_HQR", (DL_FUNC) &_sanic_solve_HQR, 3},
+    {"_sanic_solve_SQR", (DL_FUNC) &_sanic_solve_SQR, 3},
+    {"_sanic_solve_BiCGSTAB", (DL_FUNC) &_sanic_solve_BiCGSTAB, 7},
+    {"_sanic_solve_LSCG", (DL_FUNC) &_sanic_solve_LSCG, 7},
+    {"_sanic_solve_CG", (DL_FUNC) &_sanic_solve_CG, 7},
+    {"_sanic_is_symmetric2", (DL_FUNC) &_sanic_is_symmetric2, 2},
+    {"_sanic_is_symmetric", (DL_FUNC) &_sanic_is_symmetric, 2},
     {NULL, NULL, 0}
 };
 

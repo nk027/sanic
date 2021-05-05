@@ -6,11 +6,21 @@
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_BiCGSTAB(
-  Eigen::MappedSparseMatrix<double> a,
-  Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0,
-  double tol = 0, int iter = 0, bool verbose = false) {
+  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::MatrixXd> b,
+  const Eigen::Map<Eigen::MatrixXd> x0,
+  double tol = 0, int iter = 0,
+  int precond = 0,
+  bool verbose = false) {
 
-  Eigen::BiCGSTAB<Eigen::SparseMatrix<double> > solver;
+  Eigen::BiCGSTAB < Eigen::SparseMatrix<double> > solver;
+  if(precond == 1) {
+    Eigen::BiCGSTAB < Eigen::SparseMatrix<double>, Eigen::IncompleteLUT<double> > solver;
+  } else if(precond == 2) {
+    Eigen::BiCGSTAB < Eigen::SparseMatrix<double>, Eigen::IdentityPreconditioner > solver;
+  } else if(precond > 2) {
+    Rcpp::warning("No valid preconditioner requested - using default.");
+  }
 
   if(tol) {
     solver.setTolerance(tol);
@@ -40,11 +50,20 @@ Eigen::MatrixXd solve_BiCGSTAB(
 
 // [[Rcpp::export]]
 Eigen::VectorXd solve_LSCG(
-  Eigen::MappedSparseMatrix<double> a,
-  Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0,
-  double tol = 0, int iter = 0, bool verbose = false) {
+  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::MatrixXd> b,
+  const Eigen::Map<Eigen::MatrixXd> x0,
+  double tol = 0, int iter = 0,
+  int precond = 0,
+  bool verbose = false) {
 
-  Eigen::LeastSquaresConjugateGradient<Eigen::SparseMatrix<double> > solver;
+  Eigen::LeastSquaresConjugateGradient < Eigen::SparseMatrix<double> > solver;
+  if(precond == 1) {
+    Eigen::LeastSquaresConjugateGradient < Eigen::SparseMatrix<double>, Eigen::IdentityPreconditioner > solver;
+  } else if(precond > 1) {
+    Rcpp::warning("No valid preconditioner requested - using default.");
+  }
+
   if(tol) {
     solver.setTolerance(tol);
   }
@@ -73,11 +92,22 @@ Eigen::VectorXd solve_LSCG(
 
 // [[Rcpp::export]]
 Eigen::VectorXd solve_CG(
-  Eigen::MappedSparseMatrix<double> a,
-  Eigen::Map<Eigen::MatrixXd> b, Eigen::Map<Eigen::MatrixXd> x0,
-  double tol = 0, int iter = 0, int verbose = false) {
+  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::MatrixXd> b,
+  const Eigen::Map<Eigen::MatrixXd> x0,
+  double tol = 0, int iter = 0,
+  int precond = 0,
+  bool verbose = false) {
 
-  Eigen::ConjugateGradient<Eigen::SparseMatrix<double> > solver;
+  Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper > solver;
+  if(precond == 1) {
+    Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IncompleteCholesky<double> > solver;
+  } else if(precond == 2) {
+    Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IdentityPreconditioner > solver;
+  } else if(precond > 2) {
+    Rcpp::warning("No valid preconditioner requested - using default.");
+  }
+
   if(tol) {
     solver.setTolerance(tol);
   }
