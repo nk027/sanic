@@ -43,7 +43,7 @@ Rcpp::List arnoldi(
   double tol = 0, int iter = 0) {
 
   if(!iter) {
-    iter = a.rows() - 1;
+    iter = a.rows();
   }
   if(!tol) {
     tol = Eigen::NumTraits<double>::dummy_precision();
@@ -68,10 +68,32 @@ Rcpp::List arnoldi(
       if(h(i + 1, i) >= tol) {
         q.col(i + 1) = v / h(i + 1, i);
       } else {
-        return Rcpp::List::create(Rcpp::Named("Q") = q, Rcpp::Named("H") = h);
+        goto exit;
       }
-  }
+    }
   }
 
-  return Rcpp::List::create(Rcpp::Named("Q") = q, Rcpp::Named("H") = h);
+  exit:
+  Eigen::RealSchur <Eigen::MatrixXd> schur;
+  schur.computeFromHessenberg(h, q, false);
+  Eigen::MatrixXd t = schur.matrixT();
+
+  return Rcpp::List::create(Rcpp::Named("Q") = q, Rcpp::Named("H") = h, Rcpp::Named("T") = t.diagonal());
+}
+
+
+// [[Rcpp::export]]
+Rcpp::List hessenberg(
+  const Eigen::MappedSparseMatrix<double> a) {
+
+  Eigen::HessenbergDecomposition <Eigen::MatrixXd> hess;
+  hess.compute(a);
+  Eigen::MatrixXd h = hess.matrixH();
+  Eigen::MatrixXd q = hess.matrixQ();
+
+  Eigen::RealSchur <Eigen::MatrixXd> schur;
+  schur.computeFromHessenberg(h, q, false);
+  Eigen::MatrixXd t = schur.matrixT();
+
+  return Rcpp::List::create(Rcpp::Named("Q") = q, Rcpp::Named("H") = h, Rcpp::Named("T") = t.diagonal());
 }

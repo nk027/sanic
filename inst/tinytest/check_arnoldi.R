@@ -2,9 +2,9 @@
 Rcpp::sourceCpp("src/lanczos.cpp")
 
 N <- 10
+z <- rnorm(N)
 x <- sanic::sparsify(y <- matrix(rnorm(N^2), N))
 x <- sanic::sparsify(y <- crossprod(matrix(rnorm(N^2), N)))
-z <- rnorm(N)
 
 mb(pracma::arnoldi(y, z, m = N), arnoldi(x, z, iter = N))
 
@@ -18,3 +18,11 @@ mb(
   eigen(pracma::arnoldi(y, z, m = N)$H, only.values = TRUE),
   times = 10
 )
+
+mb(
+  hessenberg(x),
+  arnoldi(x, z, tol = 1e-12)
+)
+
+mgcv::slanczos(x)
+eigen(x)$values
