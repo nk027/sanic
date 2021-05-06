@@ -75,7 +75,7 @@ Rcpp::List arnoldi(
 
   exit:
   Eigen::RealSchur <Eigen::MatrixXd> schur;
-  schur.computeFromHessenberg(h, q, false);
+  schur.computeFromHessenberg(h.topLeftCorner(iter, iter), q.topLeftCorner(iter, iter), false);
   Eigen::MatrixXd t = schur.matrixT();
 
   return Rcpp::List::create(Rcpp::Named("Q") = q, Rcpp::Named("H") = h, Rcpp::Named("T") = t.diagonal());

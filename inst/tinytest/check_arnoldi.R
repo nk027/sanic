@@ -1,7 +1,7 @@
 
 Rcpp::sourceCpp("src/lanczos.cpp")
 
-N <- 10
+N <- 100
 z <- rnorm(N)
 x <- sanic::sparsify(y <- matrix(rnorm(N^2), N))
 x <- sanic::sparsify(y <- crossprod(matrix(rnorm(N^2), N)))
@@ -25,4 +25,7 @@ mb(
 )
 
 mgcv::slanczos(x)
-eigen(x)$values
+
+eigen(x, symmetric = TRUE)$values
+
+arnoldi(x, z, iter = 10)$T
