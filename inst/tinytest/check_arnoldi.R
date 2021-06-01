@@ -1,7 +1,7 @@
 
 Rcpp::sourceCpp("src/lanczos.cpp")
 
-N <- 500
+N <- 10
 z <- rnorm(N) # Random vector to start with
 x1 <- sanic::sparsify(y1 <- matrix(rnorm(N^2), N)) # Non-symmetric
 x2 <- sanic::sparsify(y2 <- crossprod(matrix(rnorm(N^2), N))) # Symmetric

@@ -142,7 +142,7 @@ Rcpp::List hessenberg(
 
 // [[Rcpp::export]]
 Rcpp::List tridiagonal(
-  const Eigen::Mapp<Eigen::MatrixXd> a) {
+  const Eigen::Map<Eigen::MatrixXd> a) {
 
   // Compute tridiagonal form
   Eigen::Tridiagonalization <Eigen::MatrixXd> tri;

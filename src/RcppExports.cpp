@@ -6,6 +6,70 @@
 
 using namespace Rcpp;
 
+// eigen_SA
+Rcpp::List eigen_SA(const Eigen::Map<Eigen::MatrixXd> a, bool vectors);
+RcppExport SEXP _sanic_eigen_SA(SEXP aSEXP, SEXP vectorsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< bool >::type vectors(vectorsSEXP);
+    rcpp_result_gen = Rcpp::wrap(eigen_SA(a, vectors));
+    return rcpp_result_gen;
+END_RCPP
+}
+// lanczos
+Rcpp::List lanczos(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map <Eigen::VectorXd> b, double tol, int iter, bool orthogonalise);
+RcppExport SEXP _sanic_lanczos(SEXP aSEXP, SEXP bSEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP orthogonaliseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map <Eigen::VectorXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< bool >::type orthogonalise(orthogonaliseSEXP);
+    rcpp_result_gen = Rcpp::wrap(lanczos(a, b, tol, iter, orthogonalise));
+    return rcpp_result_gen;
+END_RCPP
+}
+// arnoldi
+Rcpp::List arnoldi(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map <Eigen::VectorXd> b, double tol, int iter, bool symmetric);
+RcppExport SEXP _sanic_arnoldi(SEXP aSEXP, SEXP bSEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP symmetricSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map <Eigen::VectorXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type iter(iterSEXP);
+    Rcpp::traits::input_parameter< bool >::type symmetric(symmetricSEXP);
+    rcpp_result_gen = Rcpp::wrap(arnoldi(a, b, tol, iter, symmetric));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hessenberg
+Rcpp::List hessenberg(const Eigen::Map<Eigen::MatrixXd> a);
+RcppExport SEXP _sanic_hessenberg(SEXP aSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
+    rcpp_result_gen = Rcpp::wrap(hessenberg(a));
+    return rcpp_result_gen;
+END_RCPP
+}
+// tridiagonal
+Rcpp::List tridiagonal(const Eigen::Map<Eigen::MatrixXd> a);
+RcppExport SEXP _sanic_tridiagonal(SEXP aSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
+    rcpp_result_gen = Rcpp::wrap(tridiagonal(a));
+    return rcpp_result_gen;
+END_RCPP
+}
 // solve_LL
 Eigen::MatrixXd solve_LL(const Eigen::Map <Eigen::MatrixXd> a, const Eigen::Map <Eigen::MatrixXd> b, int pivot);
 RcppExport SEXP _sanic_solve_LL(SEXP aSEXP, SEXP bSEXP, SEXP pivotSEXP) {
@@ -136,15 +200,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// is_symmetric2
-bool is_symmetric2(const Eigen::Map<Eigen::MatrixXd> x, double tol);
-RcppExport SEXP _sanic_is_symmetric2(SEXP xSEXP, SEXP tolSEXP) {
+// svd_J
+Rcpp::List svd_J(const Eigen::Map<Eigen::MatrixXd> a, int type, int precond);
+RcppExport SEXP _sanic_svd_J(SEXP aSEXP, SEXP typeSEXP, SEXP precondSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(is_symmetric2(x, tol));
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< int >::type precond(precondSEXP);
+    rcpp_result_gen = Rcpp::wrap(svd_J(a, type, precond));
+    return rcpp_result_gen;
+END_RCPP
+}
+// svd_BDC
+Rcpp::List svd_BDC(const Eigen::Map<Eigen::MatrixXd> a, int type);
+RcppExport SEXP _sanic_svd_BDC(SEXP aSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(svd_BDC(a, type));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -162,6 +239,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_sanic_eigen_SA", (DL_FUNC) &_sanic_eigen_SA, 2},
+    {"_sanic_lanczos", (DL_FUNC) &_sanic_lanczos, 5},
+    {"_sanic_arnoldi", (DL_FUNC) &_sanic_arnoldi, 5},
+    {"_sanic_hessenberg", (DL_FUNC) &_sanic_hessenberg, 1},
+    {"_sanic_tridiagonal", (DL_FUNC) &_sanic_tridiagonal, 1},
     {"_sanic_solve_LL", (DL_FUNC) &_sanic_solve_LL, 3},
     {"_sanic_solve_SLL", (DL_FUNC) &_sanic_solve_SLL, 4},
     {"_sanic_solve_LU", (DL_FUNC) &_sanic_solve_LU, 3},
@@ -171,7 +253,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sanic_solve_BiCGSTAB", (DL_FUNC) &_sanic_solve_BiCGSTAB, 7},
     {"_sanic_solve_LSCG", (DL_FUNC) &_sanic_solve_LSCG, 7},
     {"_sanic_solve_CG", (DL_FUNC) &_sanic_solve_CG, 7},
-    {"_sanic_is_symmetric2", (DL_FUNC) &_sanic_is_symmetric2, 2},
+    {"_sanic_svd_J", (DL_FUNC) &_sanic_svd_J, 3},
+    {"_sanic_svd_BDC", (DL_FUNC) &_sanic_svd_BDC, 2},
     {"_sanic_is_symmetric", (DL_FUNC) &_sanic_is_symmetric, 2},
     {NULL, NULL, 0}
 };
