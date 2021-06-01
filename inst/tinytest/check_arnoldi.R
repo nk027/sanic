@@ -1,32 +1,58 @@
 
 Rcpp::sourceCpp("src/lanczos.cpp")
 
-N <- 1000
-z <- rnorm(N)
-x <- sanic::sparsify(y <- matrix(rnorm(N^2), N))
-x <- sanic::sparsify(y <- crossprod(matrix(rnorm(N^2), N)))
-
-mb(pracma::arnoldi(y, z, m = N), arnoldi(x, z, iter = N))
-
-a <- arnoldi(x, z, iter = N)
-b <- pracma::arnoldi(y, z, m = N)
-all.equal(Re(eigen(a$H)$values), Re(eigen(b$H)$values))
+N <- 500
+z <- rnorm(N) # Random vector to start with
+x1 <- sanic::sparsify(y1 <- matrix(rnorm(N^2), N)) # Non-symmetric
+x2 <- sanic::sparsify(y2 <- crossprod(matrix(rnorm(N^2), N))) # Symmetric
 
 mb(
-  eigen(y, only.values = TRUE),
-  eigen(arnoldi(x, z, iter = N)$H, only.values = TRUE),
-  eigen(pracma::arnoldi(y, z, m = N)$H, only.values = TRUE),
+  "eigen" = eigen(x1, FALSE, TRUE),
+  "pracma" = pracma::arnoldi(y1, z, m = N),
+  "arnoldi" = arnoldi(x1, z, iter = N, tol = 1e-12),
+  "hessenberg" = hessenberg(x1),
+  "eigen_symm" = eigen(x2, TRUE, TRUE),
+  "mgcv" = mgcv::slanczos(x2, k = N, tol = 1e-12),
+  "lanczos" = lanczos(x2, z, iter = N, tol = 1e-12),
+  "tridiagonal" = tridiagonal(x2),
   times = 10
 )
 
-mb(
-  hessenberg(x),
-  arnoldi(x, z, tol = 1e-12)
+out <- list(
+  "eigen" = eigen(x1, FALSE, TRUE),
+  "pracma" = pracma::arnoldi(y1, z, m = N),
+  "arnoldi" = arnoldi(x1, z, iter = N, tol = 1e-12),
+  "hessenberg" = hessenberg(x1),
+  "eigen_symm" = eigen(x2, TRUE, TRUE),
+  "mgcv" = mgcv::slanczos(x2, k = N, tol = 1e-12),
+  "arnoldi_symm" = arnoldi(x2, z, iter = N, tol = 1e-12),
+  "lanczos" = lanczos(x2, z, iter = N, tol = 1e-12),
+  "tridiagonal" = tridiagonal(x2)
 )
 
-mgcv::slanczos(x)
+ev <- sort(Re(out$eigen$values))
+summary(ev - sort(out$arnoldi$values))
+summary(ev - sort(out$hessenberg$values))
 
-sort(eigen(x, symmetric = TRUE)$values)
+ev <- sort(out$eigen_symm$values)
+summary(ev - sort(out$mgcv$values))
+summary(ev - sort(out$arnoldi_symm$values))
+summary(ev - sort(out$lanczos$values)) # Duplicated Ritz values
+summary(ev - sort(out$tridiagonal$values))
+
+plot(out$lanczos$values)
+
+
+mgcv::slanczos(x2)$values
+sort(eigen(x2, symmetric = TRUE)$values)
+lanczos(x2, z, tol = 1e-12)$T
+tridiagonal(x2)$T
+
+arnoldi(x2, z)
+plot(lanczos(x2, z)$T)
+points(lanczos2(x2, z)$T, col = "red")
+tridiagonal(x2)
+eigen(x2, symmetric = TRUE)$values
 
 sort(hessenberg(x)$T)
 

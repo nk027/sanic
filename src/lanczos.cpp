@@ -4,43 +4,11 @@
 // [[Rcpp::depends(RcppEigen)]]
 
 
-// // [[Rcpp::export]]
-// Eigen::MatrixXd lanczos(
-//   const Eigen::MappedSparseMatrix<double> a,
-//   int iter = 0) {
-
-//   if(!iter) {
-//     iter = a.rows();
-//   }
-
-//   Eigen::VectorXd v = Eigen::VectorXd::Random(a.rows()).normalized();
-//   Eigen::VectorXd w_p = a * v;
-//   double alpha = w_p.adjoint() * v;
-//   Eigen::VectorXd w = w_p - alpha * v;
-//   double beta;
-
-//   // This is just a skeleton
-//   for(int i = 1; i <= iter; i++) {
-//     beta = w.norm();
-//     if(beta != 0) {
-//       v = w.normalized();
-//     } else {
-//       v = Eigen::VectorXd::Random(a.rows()).normalized();
-//     }
-//     w_p = a * v;
-//     alpha = w_p.adjoint() * v;
-//     w = w_p - alpha * v - beta * v2;
-//   }
-
-//   return v;
-// }
-
-  // const Eigen::Map <Eigen::VectorXd> b,
-
 // [[Rcpp::export]]
-Rcpp::List arnoldi(
+Rcpp::List lanczos(
   const Eigen::MappedSparseMatrix<double> a,
-  double tol = 0, int iter = 0) {
+  const Eigen::Map <Eigen::VectorXd> b,
+  double tol = 0, int iter = 0, bool orthogonalise = true) {
 
   if(!iter) {
     iter = a.rows();
@@ -49,70 +17,145 @@ Rcpp::List arnoldi(
     tol = Eigen::NumTraits<double>::dummy_precision();
   }
 
+  // Orthonormal matrix
   Eigen::MatrixXd q = Eigen::MatrixXd::Zero(a.rows(), iter);
-  Eigen::MatrixXd h = Eigen::MatrixXd::Zero(iter + 1, iter);
-  Eigen::VectorXd v(a.rows());
-  // q.col(0) = b.normalized();
-  q.col(0) = Eigen::VectorXd::Random(a.rows()).normalized();
+  q.col(0) = b.normalized(); // Eigen::VectorXd::Random(a.rows()).normalized();
+  // Diagonal and subdiagonal vectors
+  Eigen::VectorXd d = Eigen::VectorXd(iter);
+  Eigen::VectorXd s = Eigen::VectorXd(iter - 1);
+  // Temporary vector
+  Eigen::VectorXd v = Eigen::VectorXd(a.rows());
 
-  for(int i = 0; i < iter; i++) {
-    // Rcpp::Rcout << "i=" << i << "\t";
+  // Initial iteration
+  v = a * q.col(0);
+  d(0) = q.col(0).dot(v);
+  v = v - d(0) * q.col(0);
+
+  // Iterate
+  for(int i = 1; i < iter; i++) {
+
+    if(orthogonalise) {
+      for(int j = 0; j <= i; j++) { // Orthogonalise using modified Gram-Schmidt
+        v = v - q.col(j).dot(v) * q.col(j);
+      }
+    }
+
+    if(v.norm() < tol) { // Zero vector -- hopefully converged
+      break;
+    }
+
+    // Subdiagonal coefficient
+    s(i - 1) = v.norm();
+    q.col(i) = v / s(i - 1);
+
     v = a * q.col(i);
-    for(int j = 0; j <= i; j++) {
-      // Rcpp::Rcout << "j=" << j << "\t";
+
+    // Diagonal coefficient
+    d(i) = q.col(i).dot(v);
+    v = v - d(i) * q.col(i) - s(i - 1) * q.col(i - 1);
+  }
+
+  // Solve eigenproblem
+  Eigen::SelfAdjointEigenSolver <Eigen::MatrixXd> tri;
+  tri.computeFromTridiagonal(d, s, false);
+
+  return Rcpp::List::create(
+    Rcpp::Named("diagonal") = d,
+    Rcpp::Named("subdiagonal") = s,
+    Rcpp::Named("Q") = q,
+    Rcpp::Named("values") = tri.eigenvalues());
+}
+
+
+// [[Rcpp::export]]
+Rcpp::List arnoldi(
+  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map <Eigen::VectorXd> b,
+  double tol = 0, int iter = 0,
+  bool symmetric = false) {
+
+  if(!iter) {
+    iter = a.rows();
+  }
+  if(!tol) {
+    tol = Eigen::NumTraits<double>::dummy_precision();
+  }
+
+  // Arnoldi matrix
+  Eigen::MatrixXd q = Eigen::MatrixXd::Zero(a.rows(), iter);
+  q.col(0) = b.normalized(); // Eigen::VectorXd::Random(a.rows()).normalized();
+  // Hessenberg matrix
+  Eigen::MatrixXd h = Eigen::MatrixXd::Zero(iter, iter);
+  // Temporary vector
+  Eigen::VectorXd v = Eigen::VectorXd(a.rows());
+
+  // Iterate
+  for(int i = 0; i < iter; i++) {
+
+    v = a * q.col(i);
+
+    for(int j = 0; j <= i; j++) { // Orthogonalise using modified Gram-Schmidt
       h(j, i) = q.col(j).dot(v);
       v = v - h(j, i) * q.col(j);
     }
-    h(i + 1, i) = v.norm();
-    if(h(i + 1, i) < tol) {
-      // Rcpp::Rcout << "Tolerance";
-      goto exit;
-    } else if(i < iter - 1) {
-      // Rcpp::Rcout << "Orthogonalisation";
+
+    if(v.norm() < tol) { // Zero vector -- hopefully converged
+      break;
+    }
+    if(i < iter - 1) {
+      h(i + 1, i) = v.norm();
       q.col(i + 1) = v / h(i + 1, i);
     }
-    // Rcpp::Rcout << "\n";
   }
 
-  exit:
-  // Rcpp::Rcout << "Exiting\n";
+  // Solve eigenproblem
   Eigen::RealSchur <Eigen::MatrixXd> schur;
   schur.computeFromHessenberg(h.topLeftCorner(iter, iter), q.topLeftCorner(iter, iter), false);
-  Eigen::MatrixXd t = schur.matrixT();
 
-  return Rcpp::List::create(Rcpp::Named("Q") = q, Rcpp::Named("H") = h, Rcpp::Named("T") = t.diagonal());
+  return Rcpp::List::create(
+    Rcpp::Named("H") = h,
+    Rcpp::Named("Q") = q,
+    Rcpp::Named("values") = schur.matrixT().diagonal());
 }
 
 
 // [[Rcpp::export]]
 Rcpp::List hessenberg(
-  const Eigen::MappedSparseMatrix<double> a) {
+  const Eigen::Map<Eigen::MatrixXd> a) {
 
+  // Compute Hessenberg form
   Eigen::HessenbergDecomposition <Eigen::MatrixXd> hess;
   hess.compute(a);
   Eigen::MatrixXd h = hess.matrixH();
   Eigen::MatrixXd q = hess.matrixQ();
 
+  // Solve eigenproblem
   Eigen::RealSchur <Eigen::MatrixXd> schur;
   schur.computeFromHessenberg(h, q, false);
-  Eigen::MatrixXd t = schur.matrixT();
 
-  return Rcpp::List::create(Rcpp::Named("Q") = q, Rcpp::Named("H") = h, Rcpp::Named("T") = t.diagonal());
+  return Rcpp::List::create(
+    Rcpp::Named("H") = h,
+    Rcpp::Named("Q") = q,
+    Rcpp::Named("values") = schur.matrixT().diagonal());
 }
 
 
 // [[Rcpp::export]]
 Rcpp::List tridiagonal(
-  const Eigen::MappedSparseMatrix<double> a) {
+  const Eigen::Mapp<Eigen::MatrixXd> a) {
 
+  // Compute tridiagonal form
   Eigen::Tridiagonalization <Eigen::MatrixXd> tri;
   tri.compute(a);
-  Eigen::MatrixXd d = tri.diagonal();
-  Eigen::MatrixXd s = tri.subDiagonal();
+  Eigen::VectorXd d = tri.diagonal();
+  Eigen::VectorXd s = tri.subDiagonal();
 
+  // Solve eigenproblem
   Eigen::SelfAdjointEigenSolver <Eigen::MatrixXd> trisolver;
   trisolver.computeFromTridiagonal(d, s, false);
-  Eigen::VectorXd ev = trisolver.eigenvalues();
 
-  return Rcpp::List::create(Rcpp::Named("D") = d, Rcpp::Named("S") = s, Rcpp::Named("E") = ev);
+  return Rcpp::List::create(
+    Rcpp::Named("diagonal") = d,
+    Rcpp::Named("subdiagonal") = s,
+    Rcpp::Named("values") = trisolver.eigenvalues());
 }
