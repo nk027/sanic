@@ -63,7 +63,8 @@ Rcpp::List lanczos(
     Rcpp::Named("diagonal") = d,
     Rcpp::Named("subdiagonal") = s,
     Rcpp::Named("Q") = q,
-    Rcpp::Named("values") = tri.eigenvalues());
+    Rcpp::Named("values") = tri.eigenvalues()
+  );
 }
 
 
@@ -115,7 +116,8 @@ Rcpp::List arnoldi(
   return Rcpp::List::create(
     Rcpp::Named("H") = h,
     Rcpp::Named("Q") = q,
-    Rcpp::Named("values") = schur.matrixT().diagonal());
+    Rcpp::Named("values") = schur.matrixT().diagonal()
+  );
 }
 
 
@@ -129,14 +131,15 @@ Rcpp::List hessenberg(
   Eigen::MatrixXd h = hess.matrixH();
   Eigen::MatrixXd q = hess.matrixQ();
 
-  // Solve eigenproblem
-  Eigen::RealSchur <Eigen::MatrixXd> schur;
-  schur.computeFromHessenberg(h, q, false);
+  // // Solve eigenproblem
+  // Eigen::RealSchur <Eigen::MatrixXd> schur;
+  // schur.computeFromHessenberg(h, q, false);
 
   return Rcpp::List::create(
     Rcpp::Named("H") = h,
-    Rcpp::Named("Q") = q,
-    Rcpp::Named("values") = schur.matrixT().diagonal());
+    Rcpp::Named("Q") = q
+    // Rcpp::Named("values") = schur.matrixT().diagonal()
+  );
 }
 
 
@@ -150,12 +153,13 @@ Rcpp::List tridiagonal(
   Eigen::VectorXd d = tri.diagonal();
   Eigen::VectorXd s = tri.subDiagonal();
 
-  // Solve eigenproblem
-  Eigen::SelfAdjointEigenSolver <Eigen::MatrixXd> trisolver;
-  trisolver.computeFromTridiagonal(d, s, false);
+  // // Solve eigenproblem
+  // Eigen::SelfAdjointEigenSolver <Eigen::MatrixXd> trisolver;
+  // trisolver.computeFromTridiagonal(d, s, false);
 
   return Rcpp::List::create(
     Rcpp::Named("diagonal") = d,
-    Rcpp::Named("subdiagonal") = s,
-    Rcpp::Named("values") = trisolver.eigenvalues());
+    Rcpp::Named("subdiagonal") = s
+    // Rcpp::Named("values") = trisolver.eigenvalues()
+  );
 }

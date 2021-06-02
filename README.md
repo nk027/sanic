@@ -21,11 +21,19 @@ devtools::install_github("nk027/sanic")
 Solvers
 -------
 
-Solver | Notes | Sparse method | Reference
---- | --- | --- | ---
-LU decomposition | Partial pivoting, blocking | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseLU)
-Householder QR decomposition | Column pivoting, good reliability | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ColPivHouseholderQR), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1HouseholderQR), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR)
-Cholesky decomposition | Semidefinite symmetric problems, pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LDLT), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLDLT)
-Conjugate Gradient (CG) | Symmetric problems, Jacobi preconditioner | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient)
-Least Squares (LS) CG | Rectangular LS problems, LS Jacobi preconditioner | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LeastSquaresConjugateGradient)
-Biconjugate gradient stabilised | Square problems, Jacobi preconditioner | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BiCGSTAB)
+Solver | Function | Notes | Sparse | Reference
+--- | --- | --- | --- | ---
+LU decomposition | `solve_lu()` | Partial pivoting, full pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1FullPivLU) [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseLU)
+Householder QR decomposition | `solve_qr()` | Column pivoting, full pivoting, no pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ColPivHouseholderQR), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1FullPivLU), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1HouseholderQR), [4](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR)
+Cholesky decomposition | `solve_chol()` | LDLT for semidefinite problems, LLT for positive definite problems | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LDLT), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1LLT) [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLDLT), [4](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLLT)
+Conjugate Gradient (CG) | `solve_cg()` | Biconjugate gradient stabilised (BiCGTAB) for square problems, least squares (LSCG) for rectangular problems, classic CG for symmetric positive definite problems, preconditioners | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BiCGSTAB), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1LeastSquaresConjugateGradient), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient)
+
+Eigenproblems
+--------
+
+Solver | Function | Notes | Sparse | Reference
+--- | --- | --- | --- | ---
+Spectral decomposition | `eigen2()` | Square and symmetric problems | No | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1EigenSolver), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SelfAdjointEigenSolver)
+Singular value decomposition | `svd2()` | Bidiagonal Divide and Conquer SVD for large and Jacobi SVD for small problems | No | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BDCSVD), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1JacobiSVD)
+Arnoldi iteration | `arnoldi()` | Square problems using an iteratively constructed Hessenberg matrix (cf. `hessenberg()`) | Yes | [1](https://en.wikipedia.org/wiki/Arnoldi_iteration)
+Lanczos algorithm | `lanczos()` | Symmetric problems using an iteratively constructed tridiagonal matrix(cf. `tridiagonal()`) | Yes | [1](https://en.wikipedia.org/wiki/Lanczos_algorithm)
