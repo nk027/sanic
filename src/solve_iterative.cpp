@@ -49,7 +49,7 @@ Eigen::MatrixXd solve_BiCGSTAB(
 
 
 // [[Rcpp::export]]
-Eigen::VectorXd solve_LSCG(
+Eigen::MatrixXd solve_LSCG(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
@@ -91,7 +91,7 @@ Eigen::VectorXd solve_LSCG(
 
 
 // [[Rcpp::export]]
-Eigen::VectorXd solve_CG(
+Eigen::MatrixXd solve_CG(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,

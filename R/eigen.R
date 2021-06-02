@@ -18,6 +18,7 @@
 #'
 #' @export
 #' @examples
+#' \dontshow{set.seed(42)}
 #' # Compute eigenvalues and eigenvectors for a square matrix
 #' A <- matrix(rnorm(9), nrow = 3, ncol = 3)
 #' ev <- eigen2(A, symmetric = FALSE)

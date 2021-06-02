@@ -31,6 +31,7 @@ bidiagonal divide and conquer strategy (BDC) SVD, and (2) two-sided Jacobi
 SVD for small matrices (<16) and high accuracy.
 }
 \examples{
+\dontshow{set.seed(42)}
 # Compute singular values and vectors using BDC
 A <- matrix(rnorm(9), nrow = 3, ncol = 3)
 sv <- svd2(A)

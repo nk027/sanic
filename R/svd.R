@@ -14,12 +14,14 @@
 #' computed and returned.
 #' @param thin Logical scalar indicating whether singular vectors should be
 #' returned in thinned or full format.
+#'
 #' @return Solves the generalised eigenproblem and returns a list with
 #' singular values in the \code{"d"} slot and, if requested, singular vectors
 #' in the slots \code{"u"} and \code{"v"}.
 #'
 #' @export
 #' @examples
+#' \dontshow{set.seed(42)}
 #' # Compute singular values and vectors using BDC
 #' A <- matrix(rnorm(9), nrow = 3, ncol = 3)
 #' sv <- svd2(A)

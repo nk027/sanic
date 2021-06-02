@@ -88,7 +88,7 @@ solve_cg <- function(a, b, x0,
   }
 
   if(type != "LSCG" && !is_square(a)) {
-    stop("Please provide a square matrix 'a' or use `type == 'LSCG'`.")
+    stop("Please provide a square matrix 'a' or use `type = 'LSCG'`.")
   }
 
   verbose <- isTRUE(verbose)
@@ -99,9 +99,9 @@ solve_cg <- function(a, b, x0,
     }
   } else { # Construct it
     x0 <- if(is.vector(b)) {
-      rep(0, length(b))
+      rep(0, min(dim(a)))
     } else {
-      matrix(0, dim(b)[1L], dim(b)[2L])
+      matrix(0, dim(a)[2L], dim(b)[2L])
     }
   }
   if(!missing(tol)) {
