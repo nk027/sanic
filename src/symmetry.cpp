@@ -5,10 +5,11 @@
 
 
 // [[Rcpp::export]]
-bool is_symmetric(const Eigen::Map<Eigen::MatrixXd> x, double tol = 0) {
+bool is_symmetric_i(const Eigen::Map<Eigen::MatrixXd> x,
+  double tol = 0) {
 
   if(!tol) {
-    tol = Eigen::NumTraits<double>::dummy_precision();
+    tol = Eigen::NumTraits<double>::epsilon();
   }
 
   for(int i = 1; i <= x.rows() - 1; i++) {

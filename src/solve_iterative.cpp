@@ -9,17 +9,17 @@ Eigen::MatrixXd solve_BiCGSTAB(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
-  double tol = 0, int iter = 0,
-  int precond = 0,
+  double tol = 0, unsigned int iter = 0,
+  unsigned int precond = 1,
   bool verbose = false) {
 
   Eigen::BiCGSTAB < Eigen::SparseMatrix<double> > solver;
-  if(precond == 1) {
-    Eigen::BiCGSTAB < Eigen::SparseMatrix<double>, Eigen::IncompleteLUT<double> > solver;
-  } else if(precond == 2) {
+  if(precond == 0) {
     Eigen::BiCGSTAB < Eigen::SparseMatrix<double>, Eigen::IdentityPreconditioner > solver;
+  } else if(precond == 2) {
+    Eigen::BiCGSTAB < Eigen::SparseMatrix<double>, Eigen::IncompleteLUT<double> > solver;
   } else if(precond > 2) {
-    Rcpp::warning("No valid preconditioner requested - using default.");
+    Rcpp::warning("No valid preconditioner requested -- using default.");
   }
 
   if(tol) {
@@ -53,15 +53,15 @@ Eigen::VectorXd solve_LSCG(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
-  double tol = 0, int iter = 0,
-  int precond = 0,
+  double tol = 0, unsigned int iter = 0,
+  unsigned int precond = 1,
   bool verbose = false) {
 
   Eigen::LeastSquaresConjugateGradient < Eigen::SparseMatrix<double> > solver;
-  if(precond == 1) {
+  if(precond == 0) {
     Eigen::LeastSquaresConjugateGradient < Eigen::SparseMatrix<double>, Eigen::IdentityPreconditioner > solver;
   } else if(precond > 1) {
-    Rcpp::warning("No valid preconditioner requested - using default.");
+    Rcpp::warning("No valid preconditioner requested -- using default.");
   }
 
   if(tol) {
@@ -95,17 +95,17 @@ Eigen::VectorXd solve_CG(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
-  double tol = 0, int iter = 0,
-  int precond = 0,
+  double tol = 0, unsigned int iter = 0,
+  unsigned int precond = 1,
   bool verbose = false) {
 
   Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper > solver;
   if(precond == 1) {
-    Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IncompleteCholesky<double> > solver;
-  } else if(precond == 2) {
     Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IdentityPreconditioner > solver;
+  } else if(precond == 2) {
+    Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IncompleteCholesky<double> > solver;
   } else if(precond > 2) {
-    Rcpp::warning("No valid preconditioner requested - using default.");
+    Rcpp::warning("No valid preconditioner requested -- using default.");
   }
 
   if(tol) {

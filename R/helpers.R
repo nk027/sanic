@@ -18,6 +18,18 @@ sparsify <- function(x) {
   return(as(x, "dgCMatrix"))
 }
 
+#' Check Sparsity
+#'
+#' @param x Matrix.
+#'
+#' @return Returns a logical scalar indicating sparsity.
+#'
+#' @noRd
+is_sparse <- function(x) {
+  isTRUE(inherits(x, "dgCMatrix"))
+}
+
+
 #' Check Squarity
 #'
 #' @param x Matrix or something else with dimensions.
@@ -28,6 +40,46 @@ sparsify <- function(x) {
 is_square <- function(x) {
   isTRUE(diff(dim(x)) == 0L)
 }
+
+
+#' Check Symmetry
+#'
+#' @param x A numeric matrix.
+#' @param tol A numeric scalar with the desired tolerance. The default value of
+#' 0 is coerced to the machine precision.
+#' @param checks A logical scalar indicating whether 'x' should be checked
+#' for squarity and type before checking symmetry.
+#'
+#' @return Returns a logical scalar indicating symmetry.
+#'
+#' @noRd
+is_symmetric <- function(x, tol = 0, checks = TRUE) {
+  if(isTRUE(checks)) {
+    if(!is_square(x)) {return(FALSE)}
+    if(!is.matrix(x)) {stop("Please provide a matrix")}
+  }
+  isTRUE(is_symmetric_i(x, tol = tol))
+}
+
+
+#' Check Non-Symmetry Lazily
+#'
+#' @param x A numeric matrix.
+#' @param tol A numeric scalar with the desired tolerance. The default value of
+#' 0 is coerced to the machine precision.
+#'
+#' @return Returns a logical scalar possibly indicating symmetry.
+#'
+#' @noRd
+maybe_symmetric <- function(x, tol = .Machine$double.eps, checks = TRUE) {
+  if(isTRUE(checks)) {
+    if(!is_square(x)) {return(FALSE)}
+    if(!is.matrix(x)) {stop("Please provide a matrix")}
+  }
+  pos <- c(1, nrow(x))
+  isTRUE(all.equal.numeric(x[pos, ], x[, pos], tolerance = tol))
+}
+
 
 #' Check numeric scalar
 #'

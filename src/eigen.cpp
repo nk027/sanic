@@ -28,6 +28,7 @@ Rcpp::List eigen_SA(
 }
 
 
+// [[Rcpp::export]]
 Rcpp::List eigen_SQ(
   const Eigen::Map<Eigen::MatrixXd> a,
   bool vectors = true) {

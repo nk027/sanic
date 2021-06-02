@@ -8,13 +8,13 @@
 Rcpp::List lanczos(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map <Eigen::VectorXd> b,
-  double tol = 0, int iter = 0, bool orthogonalise = true) {
+  double tol = 0, unsigned int iter = 0, bool orthogonalise = true) {
 
-  if(!iter) {
+  if(!iter || iter > a.rows()) {
     iter = a.rows();
   }
   if(!tol) {
-    tol = Eigen::NumTraits<double>::dummy_precision();
+    tol = Eigen::NumTraits<double>::epsilon();
   }
 
   // Orthonormal matrix
@@ -71,14 +71,14 @@ Rcpp::List lanczos(
 Rcpp::List arnoldi(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map <Eigen::VectorXd> b,
-  double tol = 0, int iter = 0,
+  double tol = 0, unsigned int iter = 0,
   bool symmetric = false) {
 
-  if(!iter) {
+   if(!iter || iter > a.rows()) {
     iter = a.rows();
   }
   if(!tol) {
-    tol = Eigen::NumTraits<double>::dummy_precision();
+    tol = Eigen::NumTraits<double>::epsilon();
   }
 
   // Arnoldi matrix

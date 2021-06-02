@@ -4,24 +4,24 @@
 \alias{solve_chol}
 \alias{solve_lu}
 \alias{solve_qr}
-\title{Solve a System of Equations Using Direct Methods}
+\title{Solve Systems of Equations Using Direct Methods}
 \usage{
-solve_chol(a, b, pivot = 1L, ordering = 0L)
+solve_chol(a, b, pivot = 1L, ordering = 1L)
 
-solve_lu(a, b, pivot = 0L, ordering = 0L)
+solve_lu(a, b, pivot = 1L, ordering = 1L)
 
-solve_qr(a, b, pivot = 1L, ordering = 0L)
+solve_qr(a, b, pivot = 1L, ordering = 1L)
 }
 \arguments{
 \item{a}{Square numeric matrix with the coefficients of the linear system.
-Both dense and sparse matrices are supported (see \link{sparsify}).}
+Both dense and sparse matrices are supported (see \code{\link{sparsify}}).}
 
 \item{b}{Numeric vector or matrix at the right-hand side of the linear
 system. If missing, 'b' is set to an identity matrix and 'a' is
 inverted.}
 
 \item{pivot}{Integer scalar indicating the pivoting scheme to be used.
-See the Details for further information.}
+Defaults to partial pivoting. See the Details for further information.}
 
 \item{ordering}{Integer scalar indicating the ordering scheme to be used.
 See the Details for further information.}
@@ -30,24 +30,73 @@ See the Details for further information.}
 Solves for \eqn{x} and returns a numeric matrix with the results.
 }
 \description{
-Functions to access specific direct solvers for systems of equations.
+Direct solvers using Cholesky, LU, or QR decompositions for systems of
+equations \eqn{Ax = b}{Ax = b}. Dense or sparse methods are used depending
+on the format of the input matrix (see \code{\link{sparsify}}).
+}
+\details{
+Pivoting schemes for dense matrices can be set to \code{0} for no pivoting,
+\code{1} (default) for partial pivoting, or \code{2} for full pivoting. Not
+all schemes are available for every decomposition:
+
+* \code{solve_chol()} The default is \code{pivot = 1} for the robust LDLT
+decomposition of \eqn{A}{A}, such that \eqn{A = P'LDL^*P}{A = P'LDL^*P}. For
+the LDLT \eqn{A}{A} needs to be positive or negative semidefinite. Set
+\code{pivot = 0} for the plain LLT decomposition of \eqn{A}{A}, such that
+\eqn{A = LL^* = U^*U}{A = LL^* = U^*U}. For the LLT \eqn{A}{A} needs to be
+positive definite and preferably numerically stable.
+* \code{solve_lu()} The default is \code{pivot = 1} for the partial pivoting
+LU decomposition of \eqn{A}, such that \eqn{A = PLU}{A = PLU}. For this
+scheme \eqn{A} needs to be invertible and preferably numerically stable. Set
+\code{pivot = 2} for the complete pivoting LU decomposition of \eqn{A}{A},
+such that \eqn{A = P^{-1}LUQ^{-1}}{A = PLUQ}. This scheme is applicable to
+square matrices, rank-revealing, and stable.
+\code{solve_qr()} The default is \code{pivot = 1} for the column pivoting
+Householder QR decomposition of \eqn{A}{A}, such that \eqn{AP = QR}{AP = QR}.
+This scheme is generally applicable, rank-revealing, and stable. Set
+\code{pivot = 2} for the full pivoting Householder QR decomposition of
+\eqn{A}{A}, such that \eqn{PAP' = QR}{PAP' = QR}. This scheme is generally
+applicable, rank-revealing, and optimally stable. Set \code{pivot = 0} for
+an unpivoted Householder QR decomposition of \eqn{A}{A}, such that
+\eqn{A = QR}{A = QR}. This scheme is generally applicable, but not as stable
+as pivoted variants.
+
+Ordering schemes for sparse matrices can be set to \code{0} for approximate
+minimum degree (AMD) ordering, \code{1} for column approximate minimum degree
+(COLAMD) ordering, or \code{2} for natural ordering. Not all orderings are
+available for every decomposition:
+
+* \code{solve_chol()} The default is \code{ordering = 0} for AMD ordering.
+Set \code{ordering = 2} for natural ordering.
+* \code{solve_lu()} The default is \code{ordering = 1} for COLAMD ordering.
+Set \code{ordering = 0} for AMD or \code{ordering = 2} for natural ordering.
+* \code{solve_qr()} The default is \code{ordering = 1} for COLAMD ordering.
+Set \code{ordering = 0} for AMD or \code{ordering = 2} for natural ordering.
 }
 \examples{
-# Solve via LU and QR for general matrices
-A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+\dontshow{set.seed(42)}
 x <- rnorm(3)
-b  <- A \%*\% x
 
-x_lu <- solve_lu(A, b)
-x_qr <- solve_qr(A, b)
+# Solve via QR for general matrices
+A <- matrix(rnorm(12), nrow = 4, ncol = 3)
+b <- A \%*\% x
+norm(solve_qr(A, b) - x)
+
+# Solve via LU for square matrices
+A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+b <- A \%*\% x
+norm(solve_lu(A, b) - x)
 
 # Solve via Cholesky for symmetric matrices
-AA <- crossprod(A)
-b <- AA \%*\% x
-
-x_chol <- solve_chol(AA, b)
+A <- crossprod(matrix(rnorm(9), nrow = 3, ncol = 3))
+b <- A \%*\% x
+norm(solve_chol(A, b) - x)
 
 # Sparse methods are available for the 'dgCMatrix' class from Matrix
-x_slu <- solve_lu(sparsify(A), b)
+A <- crossprod(matrix(rnorm(9), nrow = 3, ncol = 3))
+b <- A \%*\% x
+norm(solve_qr(sparsify(A), b))
+norm(solve_lu(sparsify(A), b))
+norm(solve_chol(sparsify(A), b))
 
 }

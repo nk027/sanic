@@ -7,8 +7,7 @@
 // [[Rcpp::export]]
 Rcpp::List svd_J(
   const Eigen::Map<Eigen::MatrixXd> a,
-  int type = 0,
-  int precond = 0) {
+  unsigned int type = 0, unsigned int precond = 0) {
 
   Eigen::JacobiSVD < Eigen::MatrixXd, Eigen::ColPivHouseholderQRPreconditioner> svd;
   if(precond == 1) {
@@ -36,9 +35,9 @@ Rcpp::List svd_J(
       Rcpp::Named("values") = svd.singularValues());
   } else {
     return Rcpp::List::create(
-      Rcpp::Named("values") = svd.singularValues(),
-      Rcpp::Named("U") = svd.matrixU(),
-      Rcpp::Named("V") = svd.matrixV());
+      Rcpp::Named("d") = svd.singularValues(),
+      Rcpp::Named("u") = svd.matrixU(),
+      Rcpp::Named("v") = svd.matrixV());
   }
 }
 
@@ -46,7 +45,7 @@ Rcpp::List svd_J(
 // [[Rcpp::export]]
 Rcpp::List svd_BDC(
   const Eigen::Map<Eigen::MatrixXd> a,
-  int type = 0) {
+  unsigned int type = 0) {
 
   Eigen::BDCSVD <Eigen::MatrixXd> svd;
 
@@ -65,8 +64,8 @@ Rcpp::List svd_BDC(
       Rcpp::Named("values") = svd.singularValues());
   } else {
     return Rcpp::List::create(
-      Rcpp::Named("values") = svd.singularValues(),
-      Rcpp::Named("U") = svd.matrixU(),
-      Rcpp::Named("V") = svd.matrixV());
+      Rcpp::Named("d") = svd.singularValues(),
+      Rcpp::Named("u") = svd.matrixU(),
+      Rcpp::Named("v") = svd.matrixV());
   }
 }
