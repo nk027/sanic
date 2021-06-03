@@ -13,6 +13,8 @@ Both dense and sparse matrices are supported (see \code{\link{sparsify}}).}
 \item{b}{Numeric vector or matrix at the right-hand side of the linear
 system. If missing, 'b' is set to an identity matrix and 'a' is
 inverted.}
+
+\item{...}{Dispatched to method in \code{\link{solve_chol}}.}
 }
 \value{
 Solves for \eqn{x} and returns a numeric matrix with the results.

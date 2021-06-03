@@ -58,7 +58,7 @@ is_symmetric <- function(x, tol = 0, checks = TRUE) {
     if(!is_square(x)) {return(FALSE)}
     if(!is.matrix(x)) {stop("Please provide a matrix")}
   }
-  isTRUE(is_symmetric_i(x, tol = tol))
+  isTRUE(is_symmetric_E(x, tol = tol))
 }
 
 

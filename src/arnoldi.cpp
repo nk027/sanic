@@ -5,10 +5,12 @@
 
 
 // [[Rcpp::export]]
-Rcpp::List lanczos(
+Rcpp::List lanczos_E(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map <Eigen::VectorXd> b,
-  double tol = 0, unsigned int iter = 0, bool orthogonalise = true) {
+  double tol = 0, unsigned int iter = 0,
+  bool eigen = true,
+  bool orthogonalise = true) {
 
   if(!iter || iter > a.rows()) {
     iter = a.rows();
@@ -55,6 +57,15 @@ Rcpp::List lanczos(
     v = v - d(i) * q.col(i) - s(i - 1) * q.col(i - 1);
   }
 
+
+  if(!eigen) {
+    return Rcpp::List::create(
+    Rcpp::Named("diagonal") = d,
+    Rcpp::Named("subdiagonal") = s,
+    Rcpp::Named("Q") = q
+    );
+  }
+
   // Solve eigenproblem
   Eigen::SelfAdjointEigenSolver <Eigen::MatrixXd> tri;
   tri.computeFromTridiagonal(d, s, false);
@@ -69,11 +80,11 @@ Rcpp::List lanczos(
 
 
 // [[Rcpp::export]]
-Rcpp::List arnoldi(
+Rcpp::List arnoldi_E(
   const Eigen::MappedSparseMatrix<double> a,
   const Eigen::Map <Eigen::VectorXd> b,
   double tol = 0, unsigned int iter = 0,
-  bool symmetric = false) {
+  bool eigen = true) {
 
    if(!iter || iter > a.rows()) {
     iter = a.rows();
@@ -109,6 +120,13 @@ Rcpp::List arnoldi(
     }
   }
 
+  if(!eigen) {
+    return Rcpp::List::create(
+      Rcpp::Named("H") = h,
+      Rcpp::Named("Q") = q
+    );
+  }
+
   // Solve eigenproblem
   Eigen::RealSchur <Eigen::MatrixXd> schur;
   schur.computeFromHessenberg(h.topLeftCorner(iter, iter), q.topLeftCorner(iter, iter), false);
@@ -122,7 +140,7 @@ Rcpp::List arnoldi(
 
 
 // [[Rcpp::export]]
-Rcpp::List hessenberg(
+Rcpp::List hessenberg_E(
   const Eigen::Map<Eigen::MatrixXd> a) {
 
   // Compute Hessenberg form
@@ -144,7 +162,7 @@ Rcpp::List hessenberg(
 
 
 // [[Rcpp::export]]
-Rcpp::List tridiagonal(
+Rcpp::List tridiagonal_E(
   const Eigen::Map<Eigen::MatrixXd> a) {
 
   // Compute tridiagonal form

@@ -5,7 +5,7 @@
 
 
 // [[Rcpp::export]]
-bool is_symmetric_i(const Eigen::Map<Eigen::MatrixXd> x,
+bool is_symmetric_E(const Eigen::Map<Eigen::MatrixXd> x,
   double tol = 0) {
 
   if(!tol) {
