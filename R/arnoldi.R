@@ -63,8 +63,9 @@ arnoldi <- function(a, b, symmetric,
 
 #' @rdname arnoldi
 #' @export
-lanczos = function(a, b,
+lanczos <- function(a, b,
   iter = nrow(a), tol = .Machine$double.eps,
   vectors = TRUE, orthogonalise = TRUE) {
-  arnoldi(a, symmetric = TRUE, ...)
+  arnoldi(a, b, symmetric = TRUE,
+    iter, tol, vectors, orthogonalise)
 }
