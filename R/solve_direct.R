@@ -83,7 +83,7 @@
 #' norm(solve_lu(sparsify(A), b))
 #' norm(solve_chol(sparsify(A), b))
 #'
-solve_chol <- function(a, b, pivot = 1L, ordering = 1L) {
+solve_chol <- function(a, b, pivot = 1L, ordering = 0L) {
 
   # Checks -----
   is_matrix <- is.matrix(a)

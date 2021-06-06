@@ -6,7 +6,7 @@
 \alias{solve_qr}
 \title{Solve Systems of Equations Using Direct Methods}
 \usage{
-solve_chol(a, b, pivot = 1L, ordering = 1L)
+solve_chol(a, b, pivot = 1L, ordering = 0L)
 
 solve_lu(a, b, pivot = 1L, ordering = 1L)
 
