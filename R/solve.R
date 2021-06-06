@@ -36,7 +36,7 @@ solve2 <- function(a, b, ...) {
     return(solve_qr(a, b, ...))
   }
   if(maybe_symmetric(a)) { # Cholesky for symmetric ones
-    if(is_symmetric(a, tol = 0, checks = FALSE)) {
+    if(is_symmetric(a, tol = 0)) {
       if(all(diag(a) > 0) || all(diag(a) < 0)) {
         return(solve_chol(a, b, ...))
       } else {

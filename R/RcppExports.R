@@ -9,14 +9,6 @@ arnoldi_E <- function(a, b, tol = 0, iter = 0L, eigen = TRUE) {
     .Call('_sanic_arnoldi_E', PACKAGE = 'sanic', a, b, tol, iter, eigen)
 }
 
-hessenberg_E <- function(a) {
-    .Call('_sanic_hessenberg_E', PACKAGE = 'sanic', a)
-}
-
-tridiagonal_E <- function(a) {
-    .Call('_sanic_tridiagonal_E', PACKAGE = 'sanic', a)
-}
-
 eigen_SA <- function(a, vectors = TRUE) {
     .Call('_sanic_eigen_SA', PACKAGE = 'sanic', a, vectors)
 }
@@ -69,7 +61,11 @@ svd_BDC <- function(a, type = 0L) {
     .Call('_sanic_svd_BDC', PACKAGE = 'sanic', a, type)
 }
 
-is_symmetric_E <- function(x, tol = 0) {
-    .Call('_sanic_is_symmetric_E', PACKAGE = 'sanic', x, tol)
+is_symmetric_D <- function(x, tol = 0) {
+    .Call('_sanic_is_symmetric_D', PACKAGE = 'sanic', x, tol)
+}
+
+is_symmetric_S <- function(x, tol = 0) {
+    .Call('_sanic_is_symmetric_S', PACKAGE = 'sanic', x, tol)
 }
 

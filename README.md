@@ -13,7 +13,7 @@ Installation
 -------
 
 **sanic** is available on [CRAN](https://CRAN.R-project.org/package=sanic). The development version can be installed from GitHub.
-``` r
+```r
 install.packages("sanic")
 devtools::install_github("nk027/sanic")
 ```
@@ -29,7 +29,7 @@ Cholesky decomposition | `solve_chol()` | LDLT for semidefinite problems, LLT fo
 Conjugate Gradient (CG) | `solve_cg()` | Biconjugate gradient stabilised (BiCGTAB) for square problems, least squares (LSCG) for rectangular problems, classic CG for symmetric positive definite problems, preconditioners | Always | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BiCGSTAB), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1LeastSquaresConjugateGradient), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient)
 
 Eigenproblems
---------
+-------
 
 Solver | Function | Notes | Sparse | Reference
 --- | --- | --- | --- | ---

@@ -11,7 +11,7 @@ solve_cg(
   type = c("BiCGSTAB", "LSCG", "CG"),
   iter,
   tol,
-  precond = 0L,
+  precond = 1L,
   verbose = FALSE
 )
 }

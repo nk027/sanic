@@ -34,7 +34,7 @@ eigen2 <- function(a, symmetric, vectors = TRUE) {
   # Checks -----
   if(!is.matrix(a)) {stop("Please provide 'a' as matrix.")}
   if(!is_square(a)) {stop("Please provide a square matrix 'a'.")}
-  if(missing(symmetric)) {symmetric <- is_symmetric(a, tol = 0, checks = FALSE)}
+  if(missing(symmetric)) {symmetric <- is_symmetric(a, tol = 0)}
   symmetric <- isTRUE(symmetric)
   vectors <- isTRUE(vectors)
 

@@ -1,0 +1,293 @@
+---
+title: "Eigenproblems"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library("sanic")
+library("RSpectra")
+set.seed(42)
+```
+
+```{r}
+N <- 100
+
+A_d <- matrix(rnorm(N ^ 2), N, N)
+A_s4 <- A_d; A_s4[sample(N ^ 2, N ^ 2 * 0.4)] <- 0
+A_s6 <- A_d; A_s6[sample(N ^ 2, N ^ 2 * 0.6)] <- 0
+A_s8 <- A_d; A_s8[sample(N ^ 2, N ^ 2 * 0.8)] <- 0
+A_s9 <- A_d; A_s9[sample(N ^ 2, N ^ 2 * 0.9)] <- 0
+A_s99 <- A_d; A_s99[sample(N ^ 2, N ^ 2 * 0.99)] <- 0
+
+B_d <- crossprod(A_d)
+B_s4 <- B_d; B_s4[sample(N ^ 2, N ^ 2 * 0.4)] <- 0
+B_s6 <- B_d; B_s6[sample(N ^ 2, N ^ 2 * 0.6)] <- 0
+B_s8 <- B_d; B_s8[sample(N ^ 2, N ^ 2 * 0.8)] <- 0
+B_s9 <- B_d; B_s9[sample(N ^ 2, N ^ 2 * 0.9)] <- 0
+B_s99 <- B_d; B_s99[sample(N ^ 2, N ^ 2 * 0.99)] <- 0
+
+
+mb(
+  e_base <- eigen(A_d, symmetric = FALSE, only.values = TRUE),
+  e_eigen <- eigen2(A_d, symmetric = FALSE, vectors = FALSE),
+  e_spectra <- eigs(A_d, k = 20, opts = list("retvec" = FALSE)),
+  e_arnoldi <- arnoldi(A_d, iter = 50, symmetric = FALSE, tol = 1e-10)
+)
+
+cbind(sort(e_base$values), sort(e_eigen$values), sort(e_spectra$values), sort(e_arnoldi$values))
+
+v_base <- Re(e_base$values)
+v_base <- v_base[order(abs(v_base), decreasing = TRUE)]
+
+k <- 10
+v_spectra <- matrix(NA_real_, N - 5, k)
+for(i in seq(1, N - 5)) {
+  v <- Re(eigs(A_d, k = k, opts = list("retvec" = FALSE, "maxitr" = i + 5))$values)
+  v <- v[order(abs(v), decreasing = TRUE)][seq(k)]
+  v_spectra[i, ] <- v
+}
+
+k <- 10
+v_arnoldi <- matrix(NA_real_, N - 5, k)
+for(i in seq(1, N - 5)) {
+  v <- Re(arnoldi(A_d, symmetric = FALSE, iter = i + 5)$values)
+  v <- v[order(abs(v), decreasing = TRUE)][seq(k)]
+  v_arnoldi[i, ] <- v
+}
+
+v_base[seq(k)]
+v_arnoldi[N - 5, ]
+v_spectra[N - 5, ]
+
+
+mb(
+  e_base <- eigen(B_d, symmetric = TRUE, only.values = TRUE),
+  e_eigen <- eigen2(B_d, symmetric = TRUE, vectors = FALSE),
+  e_spectra <- eigs_sym(B_d, k = 20, opts = list("retvec" = FALSE)),
+  e_arnoldi <- arnoldi(B_d, iter = 50, symmetric = TRUE, tol = 1e-10)
+)
+
+v_base <- Re(e_base$values)
+v_base <- v_base[order(abs(v_base), decreasing = TRUE)]
+
+k <- 10
+v_spectra <- matrix(NA_real_, N - 1, k)
+for(i in seq(1, N - 1)) {
+  v <- Re(eigs_sym(B_d, k = k, opts = list("retvec" = FALSE, "maxitr" = i + 1))$values)
+  if(length(v) < k) v <- c(v, rep(NA_real_, k - length(v)))
+  v_spectra[i, ] <- v
+}
+
+k <- 10
+v_arnoldi <- matrix(NA_real_, N - 1, k)
+for(i in seq(1, N - 1)) {
+  v <- Re(arnoldi(B_d, symmetric = TRUE, iter = i)$values)
+  v <- v[order(abs(v), decreasing = TRUE)][seq(k)]
+  if(length(v) < k) v <- c(v, rep(NA_real_, k - length(v)))
+  v_arnoldi[i, ] <- v
+}
+
+v_base[seq(k)]
+v_base[seq(k)] - v_arnoldi[N - 1, ]
+v_base[seq(k)] - v_spectra[N - 1, ]
+
+plot.ts(v_arnoldi)
+plot.ts(v_spectra)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+x <- rnorm(N)
+a <- A %*% x
+b <- B %*% x
+
+norm(solve_lu(A, a) - x)
+norm(solve_qr(A, a) - x)
+# norm(solve_chol(A, a) - x)
+norm(solve_cg(A, a, type = "B") - x)
+norm(solve_cg(A, a, type = "LS") - x)
+# norm(solve_cg(A, a, type = "CG") - x)
+
+norm(solve_chol(B, b) - x)
+norm(solve_lu(B, b) - x)
+norm(solve_qr(B, b) - x)
+norm(solve_cg(B, b, type = "B") - x)
+norm(solve_cg(B, b, type = "CG") - x)
+norm(solve_cg(B, b, type = "LS") - x)
+
+
+
+N <- 100
+
+A_d <- matrix(rnorm(N ^ 2), N, N)
+A_s4 <- A_d; A_s4[sample(N ^ 2, N ^ 2 * 0.4)] <- 0
+A_s6 <- A_d; A_s6[sample(N ^ 2, N ^ 2 * 0.6)] <- 0
+A_s8 <- A_d; A_s8[sample(N ^ 2, N ^ 2 * 0.8)] <- 0
+A_s9 <- A_d; A_s9[sample(N ^ 2, N ^ 2 * 0.9)] <- 0
+A_s99 <- A_d; A_s99[sample(N ^ 2, N ^ 2 * 0.99)] <- 0
+
+B_d <- crossprod(A_d)
+B_s4 <- B_d; B_s4[sample(N ^ 2, N ^ 2 * 0.4)] <- 0
+B_s6 <- B_d; B_s6[sample(N ^ 2, N ^ 2 * 0.6)] <- 0
+B_s8 <- B_d; B_s8[sample(N ^ 2, N ^ 2 * 0.8)] <- 0
+B_s9 <- B_d; B_s9[sample(N ^ 2, N ^ 2 * 0.9)] <- 0
+B_s99 <- B_d; B_s99[sample(N ^ 2, N ^ 2 * 0.99)] <- 0
+
+mb(
+  eigen(A_d, symmetric = FALSE),
+  eigen2(A_d, symmetric = FALSE),
+  eigen(A_d, symmetric = FALSE, only.values = TRUE),
+  eigen2(A_d, symmetric = FALSE, vectors = FALSE),
+  arnoldi(A_d, symmetric = FALSE, eigen = TRUE)
+)
+
+mb(
+  eigen(A_s9, symmetric = FALSE),
+  eigen2(A_s9, symmetric = FALSE),
+  eigen(A_s9, symmetric = FALSE, only.values = TRUE),
+  eigen2(A_s9, symmetric = FALSE, vectors = FALSE),
+  arnoldi(A_s9, symmetric = FALSE, eigen = TRUE)
+)
+
+mb(
+  eigen(A_s99, symmetric = FALSE),
+  eigen2(A_s99, symmetric = FALSE),
+  eigen(A_s99, symmetric = FALSE, only.values = TRUE),
+  eigen2(A_s99, symmetric = FALSE, vectors = FALSE),
+  arnoldi(A_s99, symmetric = FALSE, eigen = TRUE)
+)
+
+mb(
+  eigen(B_d, symmetric = FALSE),
+  eigen2(A_, symmetric = FALSE)
+)
+
+q <- rnorm(N)
+mb(
+  eigen(A, symmetric = FALSE, only.values = TRUE),
+  eigen2(A, symmetric = FALSE, vectors = FALSE),
+  arnoldi(A, b = q, symmetric = TRUE),
+)
+
+mb(
+  arnoldi(A, b = q, symmetric = FALSE, eigen = FALSE),
+  pracma::arnoldi(A, q = q)
+)
+
+mb(
+  eigen(B, symmetric = TRUE),
+  eigen2(B, symmetric = TRUE)
+)
+
+q <- rnorm(N)
+mb(
+  eigen(B, symmetric = TRUE, only.values = TRUE),
+  eigen2(B, symmetric = TRUE, vectors = FALSE),
+  arnoldi(B, b = q, symmetric = TRUE),
+  mgcv::slanczos(B, k = 10, tol = .Machine$double.eps)
+)
+
+mb(
+  eigen(B, symmetric = TRUE, only.values = TRUE),
+  eigen2(B, symmetric = TRUE, vectors = FALSE),
+  sanic::arnoldi(B, b = q, symmetric = TRUE, iter = 100),
+  mgcv::slanczos(B, k = 100, tol = .Machine$double.eps),
+  times = 10
+)
+
+chol_solve <- function(A, y, ...) {
+  A_ch <- chol(crossprod(A), ...)
+  backsolve(A_ch, forwardsolve(A_ch, crossprod(A, y),
+    upper.tri = TRUE, transpose = TRUE))
+}
+
+
+N <- 100
+A <- matrix(rnorm(N ^ 2), N, N)
+B <- crossprod(A)
+x <- rnorm(N)
+a <- A %*% x
+b <- B %*% x
+x0 <- rep(0, N)
+
+print(norm(solve_CG(sanic::sparsify(B), b, x0, verbose = TRUE) - x))
+print(norm(solve_BiCGSTAB(sanic::sparsify(B), b, x0, verbose = TRUE) - x))
+print(norm(solve_LSCG(sanic::sparsify(B), b, x0, verbose = TRUE) - x))
+print(norm(solve_BiCGSTAB(sanic::sparsify(A), a, x0, verbose = TRUE) - x))
+print(norm(solve_LSCG(sanic::sparsify(A), a, x0, verbose = TRUE) - x))
+
+norm(sanic:::solve_BiCGSTAB(sanic::sparsify(A), a, x0, verbose = TRUE) - x)
+
+norm(lsolve.bicgstab(A, a)$x - x)
+
+mb(
+  norm(solve(A, a) - x),
+  norm(solve_lu(A, a, pivot = 1) - x),
+  norm(solve_lu(A, a, pivot = 2) - x),
+  norm(qr.solve(A, a, tol = .Machine$double.eps) - x),
+  norm(solve_qr(A, a, pivot = 0) - x),
+  norm(solve_qr(A, a, pivot = 1) - x),
+  norm(solve_qr(A, a, pivot = 2) - x)
+)
+
+list(
+  norm(solve(A, a) - x),
+  norm(solve_lu(A, a, pivot = 1) - x),
+  norm(solve_lu(A, a, pivot = 2) - x),
+  norm(qr.solve(A, a, tol = .Machine$double.eps) - x),
+  norm(solve_qr(A, a, pivot = 0) - x),
+  norm(solve_qr(A, a, pivot = 1) - x),
+  norm(solve_qr(A, a, pivot = 2) - x)
+)
+
+
+mb(
+  norm(solve_cg(A, a, type = "B") - x)
+  norm(lsolve.bicgstab(A, a) - x)
+  solve_cg(B, b, type = "CG")
+)
+
+library(RSpectra)
+library(Matrix)
+n = 100
+k = 20
+
+set.seed(111)
+A1 = matrix(rnorm(n^2), n)  ## class "matrix"
+A2 = Matrix(A1)             ## class "dgeMatrix"
+
+mb(
+  eigs(A1, k),
+  arnoldi(A1, iter = 30, symmetric = FALSE)
+)
+
+eigs(A2, k, opts = list(retvec = FALSE))  ## eigenvalues only
+
+```

@@ -72,7 +72,7 @@
 #'
 solve_cg <- function(a, b, x0,
   type = c("BiCGSTAB", "LSCG", "CG"),
-  iter, tol, precond = 0L, verbose = FALSE) {
+  iter, tol, precond = 1L, verbose = FALSE) {
 
   # Checks -----
   type <- match.arg(type)

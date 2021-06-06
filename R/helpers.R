@@ -53,12 +53,15 @@ is_square <- function(x) {
 #' @return Returns a logical scalar indicating symmetry.
 #'
 #' @noRd
-is_symmetric <- function(x, tol = 0, checks = TRUE) {
-  if(isTRUE(checks)) {
-    if(!is_square(x)) {return(FALSE)}
-    if(!is.matrix(x)) {stop("Please provide a matrix")}
+is_symmetric <- function(x, tol = 0) {
+  is_sparse <- is_sparse(x)
+  if(!is.matrix(x) || is_sparse) {stop("Please provide a matrix")}
+  if(!is_square(x)) {return(FALSE)}
+  if(is_sparse) {
+    isTRUE(is_symmetric_S(x, tol = tol))
+  } else {
+    isTRUE(is_symmetric_D(x, tol = tol))
   }
-  isTRUE(is_symmetric_E(x, tol = tol))
 }
 
 

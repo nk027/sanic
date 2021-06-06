@@ -37,28 +37,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// hessenberg_E
-Rcpp::List hessenberg_E(const Eigen::Map<Eigen::MatrixXd> a);
-RcppExport SEXP _sanic_hessenberg_E(SEXP aSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(hessenberg_E(a));
-    return rcpp_result_gen;
-END_RCPP
-}
-// tridiagonal_E
-Rcpp::List tridiagonal_E(const Eigen::Map<Eigen::MatrixXd> a);
-RcppExport SEXP _sanic_tridiagonal_E(SEXP aSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(tridiagonal_E(a));
-    return rcpp_result_gen;
-END_RCPP
-}
 // eigen_SA
 Rcpp::List eigen_SA(const Eigen::Map<Eigen::MatrixXd> a, bool vectors);
 RcppExport SEXP _sanic_eigen_SA(SEXP aSEXP, SEXP vectorsSEXP) {
@@ -238,15 +216,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// is_symmetric_E
-bool is_symmetric_E(const Eigen::Map<Eigen::MatrixXd> x, double tol);
-RcppExport SEXP _sanic_is_symmetric_E(SEXP xSEXP, SEXP tolSEXP) {
+// is_symmetric_D
+bool is_symmetric_D(const Eigen::Map<Eigen::MatrixXd> x, double tol);
+RcppExport SEXP _sanic_is_symmetric_D(SEXP xSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type x(xSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(is_symmetric_E(x, tol));
+    rcpp_result_gen = Rcpp::wrap(is_symmetric_D(x, tol));
+    return rcpp_result_gen;
+END_RCPP
+}
+// is_symmetric_S
+bool is_symmetric_S(const Eigen::MappedSparseMatrix<double> x, double tol);
+RcppExport SEXP _sanic_is_symmetric_S(SEXP xSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MappedSparseMatrix<double> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(is_symmetric_S(x, tol));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -254,8 +244,6 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_sanic_lanczos_E", (DL_FUNC) &_sanic_lanczos_E, 6},
     {"_sanic_arnoldi_E", (DL_FUNC) &_sanic_arnoldi_E, 5},
-    {"_sanic_hessenberg_E", (DL_FUNC) &_sanic_hessenberg_E, 1},
-    {"_sanic_tridiagonal_E", (DL_FUNC) &_sanic_tridiagonal_E, 1},
     {"_sanic_eigen_SA", (DL_FUNC) &_sanic_eigen_SA, 2},
     {"_sanic_eigen_SQ", (DL_FUNC) &_sanic_eigen_SQ, 2},
     {"_sanic_solve_LL", (DL_FUNC) &_sanic_solve_LL, 3},
@@ -269,7 +257,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sanic_solve_CG", (DL_FUNC) &_sanic_solve_CG, 7},
     {"_sanic_svd_J", (DL_FUNC) &_sanic_svd_J, 3},
     {"_sanic_svd_BDC", (DL_FUNC) &_sanic_svd_BDC, 2},
-    {"_sanic_is_symmetric_E", (DL_FUNC) &_sanic_is_symmetric_E, 2},
+    {"_sanic_is_symmetric_D", (DL_FUNC) &_sanic_is_symmetric_D, 2},
+    {"_sanic_is_symmetric_S", (DL_FUNC) &_sanic_is_symmetric_S, 2},
     {NULL, NULL, 0}
 };
 

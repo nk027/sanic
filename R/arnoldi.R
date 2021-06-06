@@ -8,6 +8,8 @@
 #' @inheritParams eigen2
 #' @inheritParams solve_cg
 #' @param b Arbitrary numeric non-zero vector used to construct the basis.
+#' @param eigen Logical scalar indicating whether to compute eigenvalues from
+#' the decomposition.
 #' @param orthogonalise Logical scalar indicating whether to use plain Lanczos
 #' or full reorthogonalisation. Defaults to reorthogonalisation.
 #'
@@ -16,6 +18,7 @@
 #' slot \code{"Q"} with the orthonormal basis, and, if requested, eigenvalues
 #' in the slot \code{"values"}.
 #'
+#' @importFrom stats rnorm
 #' @export
 #' @examples
 #' \dontshow{set.seed(42)}
@@ -30,7 +33,7 @@
 #'
 arnoldi <- function(a, b, symmetric,
   iter = nrow(a), tol = .Machine$double.eps,
-  vectors = TRUE, orthogonalise = TRUE) {
+  eigen = TRUE, orthogonalise = TRUE) {
 
   # Checks -----
   if(is.matrix(a)) {a <- sparsify(a)} # Has to be sparse
@@ -42,21 +45,21 @@ arnoldi <- function(a, b, symmetric,
   iter <- int_check(iter, min = 1L, max = nrow(a),
     msg = "Please provide a valid number of iterations 'iter'.")
 
-  if(missing(symmetric)) {symmetric <- is_symmetric(a, tol = 0, checks = FALSE)}
+  if(missing(symmetric)) {symmetric <- is_symmetric(a, tol = 0)}
   symmetric <- isTRUE(symmetric)
   if(missing(b)) {
     b <- rnorm(nrow(a))
   } else {stopifnot(length(b) == nrow(a))}
-  vectors <- isTRUE(vectors)
+  eigen <- isTRUE(eigen)
   orthogonalise <- isTRUE(orthogonalise)
 
   # Execute -----
   if(symmetric) { # Lanczos algorithm
     return(lanczos_E(a, b = b,
-      tol = tol, iter = iter, orthogonalise = orthogonalise))
+      tol = tol, iter = iter, eigen = eigen, orthogonalise = orthogonalise))
   } else { # Arnoldi iteration
     return(arnoldi_E(a, b = b,
-      tol = tol, iter = iter))
+      tol = tol, iter = iter, eigen = eigen))
   }
 }
 
@@ -65,6 +68,7 @@ arnoldi <- function(a, b, symmetric,
 #' @export
 lanczos = function(a, b,
   iter = nrow(a), tol = .Machine$double.eps,
-  vectors = TRUE, orthogonalise = TRUE) {
-  arnoldi(a, symmetric = TRUE, ...)
+  eigen = TRUE, orthogonalise = TRUE) {
+  arnoldi(a, b = b, symmetric = TRUE, iter = iter, tol = tol,
+  eigen = eigen, orthogonalise = orthogonalise)
 }

@@ -100,7 +100,7 @@ Eigen::MatrixXd solve_CG(
   bool verbose = false) {
 
   Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper > solver;
-  if(precond == 1) {
+  if(precond == 0) {
     Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IdentityPreconditioner > solver;
   } else if(precond == 2) {
     Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IncompleteCholesky<double> > solver;

@@ -11,7 +11,7 @@ arnoldi(
   symmetric,
   iter = nrow(a),
   tol = .Machine$double.eps,
-  vectors = TRUE,
+  eigen = TRUE,
   orthogonalise = TRUE
 )
 
@@ -20,7 +20,7 @@ lanczos(
   b,
   iter = nrow(a),
   tol = .Machine$double.eps,
-  vectors = TRUE,
+  eigen = TRUE,
   orthogonalise = TRUE
 )
 }
@@ -39,8 +39,8 @@ to the theoretical maximum, i.e. the number of columns in 'a'.}
 \item{tol}{Numeric scalar with the desired tolerance. Defaults to the
 machine precision.}
 
-\item{vectors}{Logical scalar indicating whether eigenvectors should be
-computed and returned.}
+\item{eigen}{Logical scalar indicating whether to compute eigenvalues from
+the decomposition.}
 
 \item{orthogonalise}{Logical scalar indicating whether to use plain Lanczos
 or full reorthogonalisation. Defaults to reorthogonalisation.}

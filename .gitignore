@@ -47,3 +47,4 @@ po/*~
 # Compiled C++
 src/*.o
 src/*.so
+inst/doc
