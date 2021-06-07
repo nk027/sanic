@@ -55,7 +55,7 @@ is_square <- function(x) {
 #' @noRd
 is_symmetric <- function(x, tol = 0) {
   is_sparse <- is_sparse(x)
-  if(!is.matrix(x) || is_sparse) {stop("Please provide a matrix")}
+  if(!is.matrix(x) && !is_sparse) {stop("Please provide a matrix")}
   if(!is_square(x)) {return(FALSE)}
   if(is_sparse) {
     isTRUE(is_symmetric_S(x, tol = tol))
