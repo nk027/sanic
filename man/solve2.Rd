@@ -14,7 +14,7 @@ Both dense and sparse matrices are supported (see \code{\link{sparsify}}).}
 system. If missing, 'b' is set to an identity matrix and 'a' is
 inverted.}
 
-\item{...}{Dispatched to method in \code{\link{solve_chol}}.}
+\item{...}{Dispatched to methods in the solvers.}
 }
 \value{
 Solves for \eqn{x} and returns a numeric matrix with the results.
@@ -26,7 +26,7 @@ speed at reasonable accuracy. Please choose a suitable method manually if
 numerical stability is the main consideration.
 }
 \examples{
-\dontshow{set.seed(42)}
+set.seed(42)
 x <- rnorm(3)
 
 # Solve using a general matrix

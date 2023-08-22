@@ -1,4 +1,5 @@
-// The code was adapted from Eigen/src/Eigenvaleus/EigenSolver.h
+// The code was adapted from Eigen/src/Eigenvalues/EigenSolver.h
+// and was further adapted from Spectra/LinAlg/UpperHessenbergEigen.h
 //
 // Copyright (C) 2008 Gael Guennebaud <gael.guennebaud@inria.fr>
 // Copyright (C) 2010,2012 Jitse Niesen <jitse@maths.leeds.ac.uk>

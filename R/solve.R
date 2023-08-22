@@ -8,11 +8,11 @@
 #' @inheritParams solve_chol
 #'
 #' @return Solves for \eqn{x} and returns a numeric matrix with the results.
-#' @param ... Dispatched to method in \code{\link{solve_chol}}.
+#' @param ... Dispatched to methods in the solvers.
 #'
 #' @export
 #' @examples
-#' \dontshow{set.seed(42)}
+#' set.seed(42)
 #' x <- rnorm(3)
 #'
 #' # Solve using a general matrix
@@ -32,16 +32,17 @@
 #'
 solve2 <- function(a, b, ...) {
 
+  # Check whether a and b fit together
   if(!is_square(a)) { # Use QR for rectangular problems
     return(solve_qr(a, b, ...))
   }
   if(maybe_symmetric(a)) { # Cholesky for symmetric ones
     if(is_symmetric(a, tol = 0)) {
-      if(all(diag(a) > 0) || all(diag(a) < 0)) {
-        return(solve_chol(a, b, ...))
-      } else {
-        return(solve_chol(a, b, ...))
-      }
+      # if(all(diag(a) > 0) || all(diag(a) < 0)) { # What was the point of this?
+        # return(solve_chol(a, b, ...))
+      # } else {
+      return(solve_chol(a, b, ...))
+      # }
     }
   }
   return(solve_lu(a, b, ...)) # LU for the rest

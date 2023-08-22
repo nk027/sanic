@@ -25,7 +25,7 @@ lanczos(
 )
 }
 \arguments{
-\item{a}{Square numeric matrix with the coefficients of the linear system.}
+\item{a}{Square numeric matrix.}
 
 \item{b}{Arbitrary numeric non-zero vector used to construct the basis.}
 
@@ -57,7 +57,7 @@ Hessenberg or tridiagonal form of a matrix \eqn{A}{A} and find its
 eigenvalues.
 }
 \examples{
-\dontshow{set.seed(42)}
+set.seed(42)
 # Compute Hessenberg of a square matrix
 A <- matrix(rnorm(9), nrow = 3, ncol = 3)
 ks <- arnoldi(A, symmetric = FALSE)

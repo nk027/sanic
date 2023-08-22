@@ -58,7 +58,7 @@
 #'
 #' @export
 #' @examples
-#' \dontshow{set.seed(42)}
+#' set.seed(42)
 #' x <- rnorm(3)
 #'
 #' # Solve via QR for general matrices

@@ -74,7 +74,7 @@ Set \code{ordering = 0} for AMD or \code{ordering = 2} for natural ordering.
 Set \code{ordering = 0} for AMD or \code{ordering = 2} for natural ordering.
 }
 \examples{
-\dontshow{set.seed(42)}
+set.seed(42)
 x <- rnorm(3)
 
 # Solve via QR for general matrices

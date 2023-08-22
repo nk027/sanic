@@ -5,7 +5,7 @@
 #' \eqn{\lambda}{l} and eigenvectors \eqn{v}{v} of \eqn{A}{A}, such that
 #' \eqn{Av = \lambda v}{Av = lv}.
 #'
-#' @param a Square numeric matrix with the coefficients of the linear system.
+#' @param a Square numeric matrix.
 #' @param symmetric Logical scalar indicating whether 'a' is symmetric. By
 #' default symmetry is checked up to machine precision, which may take a long
 #' time for symmetric matrices.
@@ -18,7 +18,7 @@
 #'
 #' @export
 #' @examples
-#' \dontshow{set.seed(42)}
+#' set.seed(42)
 #' # Compute eigenvalues and eigenvectors for a square matrix
 #' A <- matrix(rnorm(9), nrow = 3, ncol = 3)
 #' ev <- eigen2(A, symmetric = FALSE)

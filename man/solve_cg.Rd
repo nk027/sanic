@@ -67,7 +67,7 @@ preconditioning. Set \code{precond = 0} for no preconditioning, or
 \code{precond = 2} for an incomplete Cholesky preconditioner.
 }
 \examples{
-\dontshow{set.seed(42)}
+set.seed(42)
 x <- rnorm(3)
 
 # Solve via BiCGSTAB for square matrices

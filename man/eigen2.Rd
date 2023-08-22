@@ -7,7 +7,7 @@
 eigen2(a, symmetric, vectors = TRUE)
 }
 \arguments{
-\item{a}{Square numeric matrix with the coefficients of the linear system.}
+\item{a}{Square numeric matrix.}
 
 \item{symmetric}{Logical scalar indicating whether 'a' is symmetric. By
 default symmetry is checked up to machine precision, which may take a long
@@ -27,7 +27,7 @@ Solvers for eigenproblems around the matrix \eqn{A}. Compute eigenvalues
 \eqn{Av = \lambda v}{Av = lv}.
 }
 \examples{
-\dontshow{set.seed(42)}
+set.seed(42)
 # Compute eigenvalues and eigenvectors for a square matrix
 A <- matrix(rnorm(9), nrow = 3, ncol = 3)
 ev <- eigen2(A, symmetric = FALSE)

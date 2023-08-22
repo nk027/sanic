@@ -1,27 +1,27 @@
 Package: sanic
 Type: Package
 Title: Solving Ax = b Nimbly in C++
-Version: 0.0.1.9000
-Date: 2020-09-04
+Version: 0.0.2
+Date: 2023-08-22
 Authors@R: c(person("Nikolas", "Kuschnig", role = c("aut", "cre"),
   email = "nikolas.kuschnig@wu.ac.at",
-  comment = c(ORCID = "0000-0002-6642-2543")))
-Author: Nikolas Kuschnig [aut, cre]  (<https://orcid.org/0000-0002-6642-2543>)
+  comment = c(ORCID = "0000-0002-6642-2543")),
+  person("Lukas", "Vashold", role = "ctb", comment = c(ORCID = "0000-0002-3562-3414")),
+  person("Yixuan", "Qiu", role = "ctb"))
+Author: Nikolas Kuschnig [aut, cre]  (<https://orcid.org/0000-0002-6642-2543>),
+  Lukas Vashold [ctb] (<https://orcid.org/0000-0002-3562-3414>),
+  Yixuan Qiu [ctb]
 Maintainer: Nikolas Kuschnig <nikolas.kuschnig@wu.ac.at>
-Description: Routines for solving large systems of linear equations in R.
-  Direct and iterative solvers from the Eigen C++ library are made available.
-  Solvers include Cholesky, LU, QR, and Krylov subspace methods (Conjugate
-  Gradient, BiCGSTAB). Both dense and sparse problems are supported.
+Description: Routines for solving large systems of linear equations and
+  eigenproblems in R. Direct and iterative solvers from the Eigen C++ library
+  are made available. Solvers include Cholesky, LU, QR, and Krylov subspace
+  methods (Conjugate Gradient, BiCGSTAB). Dense and sparse problems are
+  supported.
 URL: https://github.com/nk027/sanic
 BugReports: https://github.com/nk027/sanic/issues
 Depends: R (>= 3.3.0)
 Imports: Rcpp (>= 1.0.5), Matrix, methods
-Suggests:
-    tinytest,
-    knitr,
-    rmarkdown
-License: GPL-3
+License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppEigen
-RoxygenNote: 7.1.1
-VignetteBuilder: knitr
+RoxygenNote: 7.2.3

@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // lanczos_E
 Rcpp::List lanczos_E(const Eigen::MappedSparseMatrix<double> a, const Eigen::Map <Eigen::VectorXd> b, double tol, unsigned int iter, bool eigen, bool orthogonalise);
 RcppExport SEXP _sanic_lanczos_E(SEXP aSEXP, SEXP bSEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP eigenSEXP, SEXP orthogonaliseSEXP) {

@@ -36,7 +36,7 @@ Eigen::MatrixXd solve_BiCGSTAB(
 
   Eigen::MatrixXd x = solver.solveWithGuess(b, x0);
   if(solver.info() != Eigen::Success) {
-    Rcpp::stop("Solving failed.");
+    Rcpp::warning("Iterative solver did not converge successfully.");
   }
 
   if(verbose) {

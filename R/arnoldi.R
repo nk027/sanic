@@ -21,7 +21,7 @@
 #' @importFrom stats rnorm
 #' @export
 #' @examples
-#' \dontshow{set.seed(42)}
+#' set.seed(42)
 #' # Compute Hessenberg of a square matrix
 #' A <- matrix(rnorm(9), nrow = 3, ncol = 3)
 #' ks <- arnoldi(A, symmetric = FALSE)

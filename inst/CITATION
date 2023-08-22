@@ -1,0 +1,14 @@
+if(!exists("meta") || is.null(meta)) {meta <- packageDescription("sanic")}
+year <- sub("-.*", "", meta$Date)
+version <- meta$Version
+
+bibentry(
+  bibtype = "Manual",
+  title = "{sanic}: Solving {A}x = b Nimbly in {C++}",
+  author = c(
+    person(given = "Nikolas", family = "Kuschnig", email = "nikolas.kuschnig@wu.ac.at")),
+  year = year,
+  note = paste0("{R} package version ", version),
+  url = "https://CRAN.R-project.org/package=sanic",
+  header = "To cite the sanic package please use:"
+)

@@ -7,7 +7,7 @@
 svd2(a, type = c("BDC", "Jacobi"), vectors = TRUE, thin = TRUE)
 }
 \arguments{
-\item{a}{Square numeric matrix with the coefficients of the linear system.}
+\item{a}{Numeric matrix.}
 
 \item{type}{Character scalar. Whether to use BDC or Jacobi SVD.}
 
@@ -19,8 +19,8 @@ returned in thinned or full format.}
 }
 \value{
 Solves the generalised eigenproblem and returns a list with
-singular values in the \code{"d"} slot and, if requested, singular vectors
-in the slots \code{"u"} and \code{"v"}.
+singular values in the \code{"d"} component and, if requested, singular
+vectors in the components \code{"u"} and \code{"v"}.
 }
 \description{
 Solvers for generalized eigenproblems around the matrix \eqn{A}. Compute
@@ -31,7 +31,7 @@ bidiagonal divide and conquer strategy (BDC) SVD, and (2) two-sided Jacobi
 SVD for small matrices (<16) and high accuracy.
 }
 \examples{
-\dontshow{set.seed(42)}
+set.seed(42)
 # Compute singular values and vectors using BDC
 A <- matrix(rnorm(9), nrow = 3, ncol = 3)
 sv <- svd2(A)

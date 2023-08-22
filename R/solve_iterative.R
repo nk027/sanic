@@ -42,7 +42,7 @@
 #'
 #' @export
 #' @examples
-#' \dontshow{set.seed(42)}
+#' set.seed(42)
 #' x <- rnorm(3)
 #'
 #' # Solve via BiCGSTAB for square matrices
@@ -91,6 +91,7 @@ solve_cg <- function(a, b, x0,
     stop("Please provide a square matrix 'a' or use `type = 'LSCG'`.")
   }
 
+  precond <- int_check(precond, 0L, 2L)
   verbose <- isTRUE(verbose)
 
   if(!missing(x0)) { # Gotta check it
@@ -116,12 +117,12 @@ solve_cg <- function(a, b, x0,
   # Execute -----
   if(type == "BiCGSTAB") {
     return(solve_BiCGSTAB(a, b, x0 = x0,
-      tol = tol, iter = iter, verbose = verbose))
+      tol = tol, iter = iter, precond = precond, verbose = verbose))
   } else if(type == "LSCG") {
     return(solve_LSCG(a, b, x0 = x0,
-      tol = tol, iter = iter, verbose = verbose))
+      tol = tol, iter = iter, precond = precond, verbose = verbose))
   } else { # CG
     return(solve_CG(a, b, x0 = x0,
-      tol = tol, iter = iter, verbose = verbose))
+      tol = tol, iter = iter, precond = precond, verbose = verbose))
   }
 }
