@@ -90,6 +90,9 @@ solve_cg <- function(a, b, x0,
   if(type != "LSCG" && !is_square(a)) {
     stop("Please provide a square matrix 'a' or use `type = 'LSCG'`.")
   }
+  if(dim(a)[1L] != length(b)) {
+    stop("The dimensions of the matrix 'a' must match the length of 'b'.")
+  }
 
   precond <- int_check(precond, 0L, 2L)
   verbose <- isTRUE(verbose)
