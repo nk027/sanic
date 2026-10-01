@@ -28,15 +28,15 @@ Eigen::MatrixXd solve_LU(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_SLU(
-  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   unsigned int ordering = 1) {
 
-  Eigen::SparseLU < Eigen::MappedSparseMatrix<double>, Eigen::COLAMDOrdering<int> > solver;
+  Eigen::SparseLU < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::COLAMDOrdering<int> > solver;
   if(ordering == 0) {
-    Eigen::SparseLU < Eigen::MappedSparseMatrix<double>, Eigen::AMDOrdering<int> > solver;
+    Eigen::SparseLU < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::AMDOrdering<int> > solver;
   } else if(ordering == 2) {
-    Eigen::SparseLU < Eigen::MappedSparseMatrix<double>, Eigen::NaturalOrdering<int> > solver;
+    Eigen::SparseLU < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::NaturalOrdering<int> > solver;
   } else if(ordering > 2) {
     Rcpp::warning("No valid ordering requested -- using default.");
   }

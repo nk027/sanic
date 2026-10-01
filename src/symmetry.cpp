@@ -26,7 +26,7 @@ bool is_symmetric_D(const Eigen::Map<Eigen::MatrixXd> x,
 
 
 // [[Rcpp::export]]
-bool is_symmetric_S(const Eigen::MappedSparseMatrix<double> x,
+bool is_symmetric_S(const Eigen::Map<Eigen::SparseMatrix<double>> x,
   double tol = 0) {
 
   if(!tol) {
