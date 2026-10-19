@@ -6,7 +6,7 @@
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_BiCGSTAB(
-  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
   double tol = 0, unsigned int iter = 0,
@@ -50,7 +50,7 @@ Eigen::MatrixXd solve_BiCGSTAB(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_LSCG(
-  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
   double tol = 0, unsigned int iter = 0,
@@ -92,7 +92,7 @@ Eigen::MatrixXd solve_LSCG(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_CG(
-  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
   double tol = 0, unsigned int iter = 0,

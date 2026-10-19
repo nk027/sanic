@@ -7,7 +7,7 @@
 
 // [[Rcpp::export]]
 Rcpp::List lanczos_E(
-  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map <Eigen::VectorXd> b,
   double tol = 0, unsigned int iter = 0,
   bool eigen = true,
@@ -82,7 +82,7 @@ Rcpp::List lanczos_E(
 
 // [[Rcpp::export]]
 Rcpp::List arnoldi_E(
-  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map <Eigen::VectorXd> b,
   double tol = 0, unsigned int iter = 0,
   bool eigen = true) {

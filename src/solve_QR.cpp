@@ -28,15 +28,15 @@ Eigen::MatrixXd solve_HQR(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_SQR(
-  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   unsigned int ordering = 1) {
 
-  Eigen::SparseQR < Eigen::MappedSparseMatrix<double>, Eigen::COLAMDOrdering<int> > solver;
+  Eigen::SparseQR < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::COLAMDOrdering<int> > solver;
   if(ordering == 0) {
-    Eigen::SparseQR < Eigen::MappedSparseMatrix<double>, Eigen::AMDOrdering<int> > solver;
+    Eigen::SparseQR < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::AMDOrdering<int> > solver;
   } else if(ordering == 2) {
-    Eigen::SparseQR < Eigen::MappedSparseMatrix<double>, Eigen::NaturalOrdering<int> > solver;
+    Eigen::SparseQR < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::NaturalOrdering<int> > solver;
   } else if(ordering > 2) {
     Rcpp::warning("No valid ordering requested -- using default.");
   }

@@ -26,7 +26,7 @@ Eigen::MatrixXd solve_LL(
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_SLL(
-  const Eigen::MappedSparseMatrix<double> a,
+  const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   unsigned int pivot = 1, unsigned int ordering = 0) {
 
