@@ -33,6 +33,18 @@ solve_SLU <- function(a, b, ordering = 1L) {
     .Call('_sanic_solve_SLU', PACKAGE = 'sanic', a, b, ordering)
 }
 
+factorize_LU <- function(a, pivot) {
+    .Call('_sanic_factorize_LU', PACKAGE = 'sanic', a, pivot)
+}
+
+factorize_SLU <- function(a, ordering) {
+    .Call('_sanic_factorize_SLU', PACKAGE = 'sanic', a, ordering)
+}
+
+solve_LU_factor <- function(factor, b) {
+    .Call('_sanic_solve_LU_factor', PACKAGE = 'sanic', factor, b)
+}
+
 solve_HQR <- function(a, b, pivot = 1L) {
     .Call('_sanic_solve_HQR', PACKAGE = 'sanic', a, b, pivot)
 }

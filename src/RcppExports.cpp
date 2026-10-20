@@ -94,28 +94,64 @@ BEGIN_RCPP
 END_RCPP
 }
 // solve_LU
-Eigen::MatrixXd solve_LU(const Eigen::Map <Eigen::MatrixXd> a, const Eigen::Map <Eigen::MatrixXd> b, unsigned int pivot);
+Eigen::MatrixXd solve_LU(const Eigen::Map<Eigen::MatrixXd> a, const Eigen::Map<Eigen::MatrixXd> b, unsigned int pivot);
 RcppExport SEXP _sanic_solve_LU(SEXP aSEXP, SEXP bSEXP, SEXP pivotSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map <Eigen::MatrixXd> >::type a(aSEXP);
-    Rcpp::traits::input_parameter< const Eigen::Map <Eigen::MatrixXd> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type pivot(pivotSEXP);
     rcpp_result_gen = Rcpp::wrap(solve_LU(a, b, pivot));
     return rcpp_result_gen;
 END_RCPP
 }
 // solve_SLU
-Eigen::MatrixXd solve_SLU(const Eigen::Map<Eigen::SparseMatrix<double>> a, const Eigen::Map<Eigen::MatrixXd> b, unsigned int ordering);
+Eigen::MatrixXd solve_SLU(const Eigen::Map<Eigen::SparseMatrix<double> > a, const Eigen::Map<Eigen::MatrixXd> b, unsigned int ordering);
 RcppExport SEXP _sanic_solve_SLU(SEXP aSEXP, SEXP bSEXP, SEXP orderingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::SparseMatrix<double>> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::SparseMatrix<double> > >::type a(aSEXP);
     Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type b(bSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type ordering(orderingSEXP);
     rcpp_result_gen = Rcpp::wrap(solve_SLU(a, b, ordering));
+    return rcpp_result_gen;
+END_RCPP
+}
+// factorize_LU
+SEXP factorize_LU(const Eigen::Map<Eigen::MatrixXd> a, unsigned int pivot);
+RcppExport SEXP _sanic_factorize_LU(SEXP aSEXP, SEXP pivotSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type pivot(pivotSEXP);
+    rcpp_result_gen = Rcpp::wrap(factorize_LU(a, pivot));
+    return rcpp_result_gen;
+END_RCPP
+}
+// factorize_SLU
+SEXP factorize_SLU(const Eigen::Map<Eigen::SparseMatrix<double> > a, unsigned int ordering);
+RcppExport SEXP _sanic_factorize_SLU(SEXP aSEXP, SEXP orderingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::SparseMatrix<double> > >::type a(aSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type ordering(orderingSEXP);
+    rcpp_result_gen = Rcpp::wrap(factorize_SLU(a, ordering));
+    return rcpp_result_gen;
+END_RCPP
+}
+// solve_LU_factor
+Eigen::MatrixXd solve_LU_factor(SEXP factor, Rcpp::Nullable<Rcpp::NumericMatrix> b);
+RcppExport SEXP _sanic_solve_LU_factor(SEXP factorSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type factor(factorSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_LU_factor(factor, b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -255,6 +291,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sanic_solve_SLL", (DL_FUNC) &_sanic_solve_SLL, 4},
     {"_sanic_solve_LU", (DL_FUNC) &_sanic_solve_LU, 3},
     {"_sanic_solve_SLU", (DL_FUNC) &_sanic_solve_SLU, 3},
+    {"_sanic_factorize_LU", (DL_FUNC) &_sanic_factorize_LU, 2},
+    {"_sanic_factorize_SLU", (DL_FUNC) &_sanic_factorize_SLU, 2},
+    {"_sanic_solve_LU_factor", (DL_FUNC) &_sanic_solve_LU_factor, 2},
     {"_sanic_solve_HQR", (DL_FUNC) &_sanic_solve_HQR, 3},
     {"_sanic_solve_SQR", (DL_FUNC) &_sanic_solve_SQR, 3},
     {"_sanic_solve_BiCGSTAB", (DL_FUNC) &_sanic_solve_BiCGSTAB, 7},
