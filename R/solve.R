@@ -31,18 +31,30 @@
 #' norm(solve2(A, b) - x)
 #'
 solve2 <- function(a, b, ...) {
-
   # Check whether a and b fit together
-  if(!is_square(a)) { # Use QR for rectangular problems
+  if (!is_square(a)) {
+    # Use QR for rectangular problems
     return(solve_qr(a, b, ...))
   }
-  if(maybe_symmetric(a)) { # Cholesky for symmetric ones
-    if(is_symmetric(a, tol = 0)) {
+  if (maybe_symmetric(a)) {
+    # Cholesky for symmetric ones
+    if (is_symmetric(a, tol = 0)) {
       # if(all(diag(a) > 0) || all(diag(a) < 0)) { # What was the point of this?
-        # return(solve_chol(a, b, ...))
+      # return(solve_chol(a, b, ...))
       # } else {
-      return(solve_chol(a, b, ...))
-      # }
+      ans <- tryCatch(solve_chol(a, b, ...), error = function(e) NULL)
+      if (
+        !is.null(ans) &&
+          all(is.finite(ans)) &&
+          isTRUE(all.equal(
+            as.matrix(a) %*% ans,
+            as.matrix(b),
+            tolerance = sqrt(.Machine$double.eps)
+          ))
+      ) {
+        return(ans)
+      }
+      return(solve_lu(a, b, ...))
     }
   }
   return(solve_lu(a, b, ...)) # LU for the rest

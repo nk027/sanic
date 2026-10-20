@@ -41,16 +41,21 @@ svd2 <- function(a, type = c("BDC", "Jacobi"), vectors = TRUE, thin = TRUE) {
   # Checks -----
   type <- match.arg(type)
 
-  if(!is.matrix(a)) {stop("Please provide 'a' as matrix or sparse 'dgCMatrix'.")}
+  if(!is.matrix(a) || !is.numeric(a) || is.complex(a)) {
+    stop("Please provide 'a' as a numeric matrix.")
+  }
+  storage.mode(a) <- "double"
   vectors <- isTRUE(vectors)
   thin <- isTRUE(thin)
 
   thin_full <- if(vectors) {if(thin) {0} else {1}} else {2}
 
   # Execute -----
-  if(type == "Jacobi") {
-    return(svd_J(a, type = thin_full))
+  result <- if(type == "Jacobi") {
+    svd_J(a, type = thin_full)
   } else {
-    return(svd_BDC(a, type = thin_full))
+    svd_BDC(a, type = thin_full)
   }
+  if(!vectors) names(result) <- "d"
+  result
 }

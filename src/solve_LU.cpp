@@ -5,7 +5,11 @@
 template <typename Solver, typename MatrixA, typename MatrixB>
 Eigen::MatrixXd run_lu(Solver& solver, const MatrixA& a, const MatrixB& b) {
   solver.compute(a);
-  return solver.solve(b);
+  Eigen::MatrixXd x = solver.solve(b);
+  if(!x.allFinite()) {
+    Rcpp::stop("Solving failed.");
+  }
+  return x;
 }
 
 template <typename Solver, typename MatrixA, typename MatrixB>
@@ -31,7 +35,13 @@ Eigen::MatrixXd solve_LU(
     Rcpp::warning("No unpivoted scheme available -- using default.");
   } else if(pivot == 2) {
     Eigen::FullPivLU<Eigen::MatrixXd> solver;
-    return run_lu(solver, a, b);
+    solver.compute(a);
+    if(solver.rank() < a.cols()) {
+      Rcpp::stop("Matrix is singular to working precision.");
+    }
+    Eigen::MatrixXd x = solver.solve(b);
+    if(!x.allFinite()) Rcpp::stop("Solving failed.");
+    return x;
   } else if(pivot > 2) {
     Rcpp::warning("No valid pivoting scheme requested -- using default.");
   }
