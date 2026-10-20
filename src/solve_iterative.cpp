@@ -1,8 +1,28 @@
-
 #include <RcppEigen.h>
 
 // [[Rcpp::depends(RcppEigen)]]
 
+template <typename Solver, typename MatrixA, typename MatrixB>
+Eigen::MatrixXd run_iterative(
+  Solver& solver, const MatrixA& a, const MatrixB& b, const MatrixB& x0,
+  double tol, unsigned int iter, bool verbose) {
+
+  if(tol) solver.setTolerance(tol);
+  if(iter) solver.setMaxIterations(iter);
+  solver.compute(a);
+  if(solver.info() != Eigen::Success) {
+    Rcpp::stop("Setup failed.");
+  }
+  Eigen::MatrixXd x = solver.solveWithGuess(b, x0);
+  if(solver.info() != Eigen::Success) {
+    Rcpp::warning("Iterative solver did not converge successfully.");
+  }
+  if(verbose) {
+    Rcpp::Rcout << "Iterations: " << solver.iterations() << "\n";
+    Rcpp::Rcout << "Estimated error: " << solver.error() << "\n";
+  }
+  return x;
+}
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_BiCGSTAB(
@@ -13,40 +33,20 @@ Eigen::MatrixXd solve_BiCGSTAB(
   unsigned int precond = 1,
   bool verbose = false) {
 
-  Eigen::BiCGSTAB < Eigen::SparseMatrix<double> > solver;
   if(precond == 0) {
-    Eigen::BiCGSTAB < Eigen::SparseMatrix<double>, Eigen::IdentityPreconditioner > solver;
-  } else if(precond == 2) {
-    Eigen::BiCGSTAB < Eigen::SparseMatrix<double>, Eigen::IncompleteLUT<double> > solver;
-  } else if(precond > 2) {
+    Eigen::BiCGSTAB<Eigen::SparseMatrix<double>, Eigen::IdentityPreconditioner> solver;
+    return run_iterative(solver, a, b, x0, tol, iter, verbose);
+  }
+  if(precond == 2) {
+    Eigen::BiCGSTAB<Eigen::SparseMatrix<double>, Eigen::IncompleteLUT<double>> solver;
+    return run_iterative(solver, a, b, x0, tol, iter, verbose);
+  }
+  if(precond > 2) {
     Rcpp::warning("No valid preconditioner requested -- using default.");
   }
-
-  if(tol) {
-    solver.setTolerance(tol);
-  }
-  if(iter) {
-    solver.setMaxIterations(iter);
-  }
-
-  solver.compute(a);
-  if(solver.info() != Eigen::Success) {
-    Rcpp::stop("Setup failed.");
-  }
-
-  Eigen::MatrixXd x = solver.solveWithGuess(b, x0);
-  if(solver.info() != Eigen::Success) {
-    Rcpp::warning("Iterative solver did not converge successfully.");
-  }
-
-  if(verbose) {
-    Rcpp::Rcout << "Iterations: " << solver.iterations() << "\n";
-    Rcpp::Rcout << "Estimated error: " << solver.error() << "\n";
-  }
-
-  return x;
+  Eigen::BiCGSTAB<Eigen::SparseMatrix<double>> solver;
+  return run_iterative(solver, a, b, x0, tol, iter, verbose);
 }
-
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_LSCG(
@@ -57,38 +57,16 @@ Eigen::MatrixXd solve_LSCG(
   unsigned int precond = 1,
   bool verbose = false) {
 
-  Eigen::LeastSquaresConjugateGradient < Eigen::SparseMatrix<double> > solver;
   if(precond == 0) {
-    Eigen::LeastSquaresConjugateGradient < Eigen::SparseMatrix<double>, Eigen::IdentityPreconditioner > solver;
-  } else if(precond > 1) {
+    Eigen::LeastSquaresConjugateGradient<Eigen::SparseMatrix<double>, Eigen::IdentityPreconditioner> solver;
+    return run_iterative(solver, a, b, x0, tol, iter, verbose);
+  }
+  if(precond > 1) {
     Rcpp::warning("No valid preconditioner requested -- using default.");
   }
-
-  if(tol) {
-    solver.setTolerance(tol);
-  }
-  if(iter) {
-    solver.setMaxIterations(iter);
-  }
-
-  solver.compute(a);
-  if(solver.info() != Eigen::Success) {
-    Rcpp::stop("Setup failed.");
-  }
-
-  Eigen::MatrixXd x = solver.solveWithGuess(b, x0);
-  if(solver.info() != Eigen::Success) {
-    Rcpp::stop("Solving failed.");
-  }
-
-  if(verbose) {
-    Rcpp::Rcout << "Iterations: " << solver.iterations() << "\n";
-    Rcpp::Rcout << "Estimated error: " << solver.error() << "\n";
-  }
-
-  return x;
+  Eigen::LeastSquaresConjugateGradient<Eigen::SparseMatrix<double>> solver;
+  return run_iterative(solver, a, b, x0, tol, iter, verbose);
 }
-
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_CG(
@@ -99,36 +77,17 @@ Eigen::MatrixXd solve_CG(
   unsigned int precond = 1,
   bool verbose = false) {
 
-  Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper > solver;
   if(precond == 0) {
-    Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IdentityPreconditioner > solver;
-  } else if(precond == 2) {
-    Eigen::ConjugateGradient < Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IncompleteCholesky<double> > solver;
-  } else if(precond > 2) {
+    Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IdentityPreconditioner> solver;
+    return run_iterative(solver, a, b, x0, tol, iter, verbose);
+  }
+  if(precond == 2) {
+    Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper, Eigen::IncompleteCholesky<double>> solver;
+    return run_iterative(solver, a, b, x0, tol, iter, verbose);
+  }
+  if(precond > 2) {
     Rcpp::warning("No valid preconditioner requested -- using default.");
   }
-
-  if(tol) {
-    solver.setTolerance(tol);
-  }
-  if(iter) {
-    solver.setMaxIterations(iter);
-  }
-
-  solver.compute(a);
-  if(solver.info() != Eigen::Success) {
-    Rcpp::stop("Setup failed.");
-  }
-
-  Eigen::MatrixXd x = solver.solveWithGuess(b, x0);
-  if(solver.info() != Eigen::Success) {
-    Rcpp::stop("Solving failed.");
-  }
-
-  if(verbose) {
-    Rcpp::Rcout << "Iterations: " << solver.iterations() << "\n";
-    Rcpp::Rcout << "Estimated error: " << solver.error() << "\n";
-  }
-
-  return x;
+  Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper> solver;
+  return run_iterative(solver, a, b, x0, tol, iter, verbose);
 }

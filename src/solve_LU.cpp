@@ -1,8 +1,25 @@
-
 #include <RcppEigen.h>
 
 // [[Rcpp::depends(RcppEigen)]]
 
+template <typename Solver, typename MatrixA, typename MatrixB>
+Eigen::MatrixXd run_lu(Solver& solver, const MatrixA& a, const MatrixB& b) {
+  solver.compute(a);
+  return solver.solve(b);
+}
+
+template <typename Solver, typename MatrixA, typename MatrixB>
+Eigen::MatrixXd run_sparse_lu(Solver& solver, const MatrixA& a, const MatrixB& b) {
+  solver.compute(a);
+  if(solver.info() != Eigen::Success) {
+    Rcpp::stop("Decomposition failed.");
+  }
+  Eigen::MatrixXd x = solver.solve(b);
+  if(solver.info() != Eigen::Success) {
+    Rcpp::stop("Solving failed.");
+  }
+  return x;
+}
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_LU(
@@ -10,21 +27,17 @@ Eigen::MatrixXd solve_LU(
   const Eigen::Map <Eigen::MatrixXd> b,
   unsigned int pivot = 1) {
 
-  Eigen::PartialPivLU <Eigen::MatrixXd> lu;
   if(pivot == 0) {
     Rcpp::warning("No unpivoted scheme available -- using default.");
   } else if(pivot == 2) {
-    Eigen::FullPivLU <Eigen::MatrixXd> lu;
+    Eigen::FullPivLU<Eigen::MatrixXd> solver;
+    return run_lu(solver, a, b);
   } else if(pivot > 2) {
     Rcpp::warning("No valid pivoting scheme requested -- using default.");
   }
-
-  lu.compute(a);
-  Eigen::MatrixXd x = lu.solve(b);
-
-  return x;
+  Eigen::PartialPivLU<Eigen::MatrixXd> solver;
+  return run_lu(solver, a, b);
 }
-
 
 // [[Rcpp::export]]
 Eigen::MatrixXd solve_SLU(
@@ -32,24 +45,17 @@ Eigen::MatrixXd solve_SLU(
   const Eigen::Map<Eigen::MatrixXd> b,
   unsigned int ordering = 1) {
 
-  Eigen::SparseLU < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::COLAMDOrdering<int> > solver;
   if(ordering == 0) {
-    Eigen::SparseLU < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::AMDOrdering<int> > solver;
-  } else if(ordering == 2) {
-    Eigen::SparseLU < Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::NaturalOrdering<int> > solver;
-  } else if(ordering > 2) {
+    Eigen::SparseLU<Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::AMDOrdering<int>> solver;
+    return run_sparse_lu(solver, a, b);
+  }
+  if(ordering == 2) {
+    Eigen::SparseLU<Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::NaturalOrdering<int>> solver;
+    return run_sparse_lu(solver, a, b);
+  }
+  if(ordering > 2) {
     Rcpp::warning("No valid ordering requested -- using default.");
   }
-
-  solver.compute(a);
-  if(solver.info() != Eigen::Success) {
-    Rcpp::stop("Decomposition failed.");
-  }
-
-  Eigen::MatrixXd x = solver.solve(b);
-  if(solver.info() != Eigen::Success) {
-    Rcpp::stop("Solving failed.");
-  }
-
-  return x;
+  Eigen::SparseLU<Eigen::Map<Eigen::SparseMatrix<double>>, Eigen::COLAMDOrdering<int>> solver;
+  return run_sparse_lu(solver, a, b);
 }
