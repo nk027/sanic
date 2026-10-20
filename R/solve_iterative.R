@@ -1,4 +1,3 @@
-
 #' Solve Systems of Equations Using Iterative Methods
 #'
 #' Iterative solvers using the Conjugate Gradient method for sparse systems of
@@ -70,62 +69,118 @@
 #' # And provide guesses as starting value
 #' solve_cg(A, b, x0 = x, verbose = TRUE)
 #'
-solve_cg <- function(a, b, x0,
+solve_cg <- function(
+  a,
+  b,
+  x0,
   type = c("BiCGSTAB", "LSCG", "CG"),
-  iter, tol, precond = 1L, verbose = FALSE) {
-
+  iter,
+  tol,
+  precond = 1L,
+  verbose = FALSE
+) {
   # Checks -----
   type <- match.arg(type)
 
-  if(is.matrix(a)) {a <- sparsify(a)} # Has to be sparse
-  if(!is_sparse(a)) {stop("Please provide 'a' as sparse 'dgCMatrix'.")}
+  if (is.matrix(a)) {
+    a <- sparsify(a)
+  } # Has to be sparse
+  if (!is_sparse(a)) {
+    stop("Please provide 'a' as sparse 'dgCMatrix'.")
+  }
 
-  if(missing(b)) {b <- diag(dim(a)[1L])} else { # Invert without b
-    if(inherits(b, "Matrix")) {b <- as.matrix(b)}
-    if(!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
+  if (missing(b)) {
+    b <- diag(dim(a)[2L])
+  } else {
+    # Invert without b
+    if (inherits(b, "Matrix")) {
+      b <- as.matrix(b)
+    }
+    if (!is.numeric(b) || (!is.vector(b) && !is.matrix(b))) {
       stop("Please provide 'b' as a numeric vector or matrix.")
     }
   }
 
-  if(type != "LSCG" && !is_square(a)) {
+  if (type != "LSCG" && !is_square(a)) {
     stop("Please provide a square matrix 'a' or use `type = 'LSCG'`.")
   }
-  if(dim(a)[1L] != length(b)) {
-    stop("The dimensions of the matrix 'a' must match the length of 'b'.")
+  if (is.matrix(b)) {
+    valid_b_dim <- nrow(b) == nrow(a)
+  } else {
+    valid_b_dim <- length(b) == nrow(a)
+  }
+  if (!valid_b_dim) {
+    stop("The dimensions of the matrix 'a' must match the dimensions of 'b'.")
   }
 
   precond <- int_check(precond, 0L, 2L)
   verbose <- isTRUE(verbose)
 
-  if(!missing(x0)) { # Gotta check it
-    if(!is.numeric(x0) || (!is.vector(x0) && !is.matrix(x0))) {
+  if (!missing(x0)) {
+    # Gotta check it
+    if (!is.numeric(x0) || (!is.vector(x0) && !is.matrix(x0))) {
       stop("Please provide the guess 'x0' as a numeric vector or matrix.")
     }
-  } else { # Construct it
-    x0 <- if(is.vector(b)) {
+  } else {
+    # Construct it
+    x0 <- if (is.vector(b)) {
       rep(0, min(dim(a)))
     } else {
       matrix(0, dim(a)[2L], dim(b)[2L])
     }
   }
-  if(!missing(tol)) {
-    tol <- num_check(tol, min = 0, max = Inf,
-      msg = "Please provide a valid tolerance 'tol'.")
-  } else {tol <- 0} # Uses Eigen's default (i.e. machine precision)
-  if(!missing(iter)) {
-    iter <- int_check(tol, min = 0, max = max(dim(a)),
-      msg = "Please provide a valid number of iterations 'iter'.")
-  } else {iter <- 0L} # Uses Eigen's default (i.e. the number of columns in a)
+  if (!missing(tol)) {
+    tol <- num_check(
+      tol,
+      min = 0,
+      max = Inf,
+      msg = "Please provide a valid tolerance 'tol'."
+    )
+  } else {
+    tol <- 0
+  } # Uses Eigen's default (i.e. machine precision)
+  if (!missing(iter)) {
+    iter <- int_check(
+      iter,
+      min = 0,
+      max = max(dim(a)),
+      msg = "Please provide a valid number of iterations 'iter'."
+    )
+  } else {
+    iter <- 0L
+  } # Uses Eigen's default (i.e. the number of columns in a)
 
   # Execute -----
-  if(type == "BiCGSTAB") {
-    return(solve_BiCGSTAB(a, b, x0 = x0,
-      tol = tol, iter = iter, precond = precond, verbose = verbose))
-  } else if(type == "LSCG") {
-    return(solve_LSCG(a, b, x0 = x0,
-      tol = tol, iter = iter, precond = precond, verbose = verbose))
-  } else { # CG
-    return(solve_CG(a, b, x0 = x0,
-      tol = tol, iter = iter, precond = precond, verbose = verbose))
+  if (type == "BiCGSTAB") {
+    return(solve_BiCGSTAB(
+      a,
+      b,
+      x0 = x0,
+      tol = tol,
+      iter = iter,
+      precond = precond,
+      verbose = verbose
+    ))
+  } else if (type == "LSCG") {
+    return(solve_LSCG(
+      a,
+      b,
+      x0 = x0,
+      tol = tol,
+      iter = iter,
+      precond = precond,
+      verbose = verbose
+    ))
+  } else {
+    # CG
+    return(solve_CG(
+      a,
+      b,
+      x0 = x0,
+      tol = tol,
+      iter = iter,
+      precond = precond,
+      verbose = verbose
+    ))
   }
 }

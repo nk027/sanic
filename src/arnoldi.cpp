@@ -20,61 +20,61 @@ Rcpp::List lanczos_E(
     tol = Eigen::NumTraits<double>::epsilon();
   }
 
-  // Orthonormal matrix
-  Eigen::MatrixXd q = Eigen::MatrixXd::Zero(a.rows(), iter);
-  q.col(0) = b.normalized(); // Eigen::VectorXd::Random(a.rows()).normalized();
-  // Diagonal and subdiagonal vectors
-  Eigen::VectorXd d = Eigen::VectorXd(iter);
-  Eigen::VectorXd s = Eigen::VectorXd(iter - 1);
-  // Temporary vector
-  Eigen::VectorXd v = Eigen::VectorXd(a.rows());
+  if(b.size() != a.rows() || !b.allFinite() || b.norm() == 0) {
+    Rcpp::stop("Starting vector 'b' must be finite, non-zero, and match the matrix dimensions.");
+  }
 
-  // Initial iteration
+  Eigen::MatrixXd q = Eigen::MatrixXd::Zero(a.rows(), iter);
+  q.col(0) = b.normalized();
+  Eigen::VectorXd d = Eigen::VectorXd::Zero(iter);
+  Eigen::VectorXd s = Eigen::VectorXd::Zero(iter - 1);
+  Eigen::VectorXd v = Eigen::VectorXd(a.rows());
+  unsigned int m = 1;
+
   v = a * q.col(0);
   d(0) = q.col(0).dot(v);
   v = v - d(0) * q.col(0);
 
-  // Iterate
-  for(int i = 1; i < iter; i++) {
-
+  for(unsigned int i = 1; i < iter; i++) {
     if(orthogonalise) {
-      for(int j = 0; j <= i; j++) { // Orthogonalise using modified Gram-Schmidt
+      for(unsigned int j = 0; j <= i; j++) {
         v = v - q.col(j).dot(v) * q.col(j);
       }
     }
 
-    if(v.norm() < tol) { // Zero vector -- hopefully converged
-      break;
-    }
+    const double beta = v.norm();
+    if(beta < tol) break;
 
-    // Subdiagonal coefficient
-    s(i - 1) = v.norm();
-    q.col(i) = v / s(i - 1);
+    s(i - 1) = beta;
+    q.col(i) = v / beta;
+    m = i + 1;
 
     v = a * q.col(i);
-
-    // Diagonal coefficient
     d(i) = q.col(i).dot(v);
-    v = v - d(i) * q.col(i) - s(i - 1) * q.col(i - 1);
+    v = v - d(i) * q.col(i) - beta * q.col(i - 1);
   }
+
+  const Eigen::VectorXd d_out = d.head(m);
+  const Eigen::VectorXd s_out = s.head(m - 1);
+  const Eigen::MatrixXd q_out = q.leftCols(m);
 
 
   if(!eigen) {
     return Rcpp::List::create(
-    Rcpp::Named("diagonal") = d,
-    Rcpp::Named("subdiagonal") = s,
-    Rcpp::Named("Q") = q
+    Rcpp::Named("diagonal") = d_out,
+    Rcpp::Named("subdiagonal") = s_out,
+    Rcpp::Named("Q") = q_out
     );
   }
 
   // Solve eigenproblem
   Eigen::SelfAdjointEigenSolver <Eigen::MatrixXd> tri;
-  tri.computeFromTridiagonal(d, s, false);
+  tri.computeFromTridiagonal(d_out, s_out, false);
 
   return Rcpp::List::create(
-    Rcpp::Named("diagonal") = d,
-    Rcpp::Named("subdiagonal") = s,
-    Rcpp::Named("Q") = q,
+    Rcpp::Named("diagonal") = d_out,
+    Rcpp::Named("subdiagonal") = s_out,
+    Rcpp::Named("Q") = q_out,
     Rcpp::Named("values") = tri.eigenvalues()
   );
 }
@@ -94,47 +94,46 @@ Rcpp::List arnoldi_E(
     tol = Eigen::NumTraits<double>::epsilon();
   }
 
-  // Arnoldi matrix
+  if(b.size() != a.rows() || !b.allFinite() || b.norm() == 0) {
+    Rcpp::stop("Starting vector 'b' must be finite, non-zero, and match the matrix dimensions.");
+  }
+
   Eigen::MatrixXd q = Eigen::MatrixXd::Zero(a.rows(), iter);
-  q.col(0) = b.normalized(); // Eigen::VectorXd::Random(a.rows()).normalized();
-  // Hessenberg matrix
+  q.col(0) = b.normalized();
   Eigen::MatrixXd h = Eigen::MatrixXd::Zero(iter, iter);
-  // Temporary vector
   Eigen::VectorXd v = Eigen::VectorXd(a.rows());
+  unsigned int m = 0;
 
-  // Iterate
-  for(int i = 0; i < iter; i++) {
-
+  for(unsigned int i = 0; i < iter; i++) {
     v = a * q.col(i);
-
-    for(int j = 0; j <= i; j++) { // Orthogonalise using modified Gram-Schmidt
+    for(unsigned int j = 0; j <= i; j++) {
       h(j, i) = q.col(j).dot(v);
       v = v - h(j, i) * q.col(j);
     }
 
-    if(v.norm() < tol) { // Zero vector -- hopefully converged
-      break;
-    }
-    if(i < iter - 1) {
-      h(i + 1, i) = v.norm();
-      q.col(i + 1) = v / h(i + 1, i);
-    }
+    m = i + 1;
+    const double beta = v.norm();
+    if(beta < tol || i == iter - 1) break;
+    h(i + 1, i) = beta;
+    q.col(i + 1) = v / beta;
   }
+  const Eigen::MatrixXd h_out = h.topLeftCorner(m, m);
+  const Eigen::MatrixXd q_out = q.leftCols(m);
 
   if(!eigen) {
     return Rcpp::List::create(
-      Rcpp::Named("H") = h,
-      Rcpp::Named("Q") = q
+      Rcpp::Named("H") = h_out,
+      Rcpp::Named("Q") = q_out
     );
   }
 
   // Solve eigenproblem
   Spectra::UpperHessenbergEigen <> eig;
-  eig.compute(h.topLeftCorner(iter, iter), false);
+  eig.compute(h_out, false);
 
   return Rcpp::List::create(
-    Rcpp::Named("H") = h,
-    Rcpp::Named("Q") = q,
+    Rcpp::Named("H") = h_out,
+    Rcpp::Named("Q") = q_out,
     Rcpp::Named("values") = eig.eigenvalues()
   );
 }
