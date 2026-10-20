@@ -146,7 +146,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // solve_BiCGSTAB
-Eigen::MatrixXd solve_BiCGSTAB(const Eigen::Map<Eigen::SparseMatrix<double>> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, unsigned int iter, unsigned int precond, bool verbose);
+Rcpp::NumericMatrix solve_BiCGSTAB(const Eigen::Map<Eigen::SparseMatrix<double>> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, unsigned int iter, unsigned int precond, bool verbose);
 RcppExport SEXP _sanic_solve_BiCGSTAB(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP precondSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -163,7 +163,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // solve_LSCG
-Eigen::MatrixXd solve_LSCG(const Eigen::Map<Eigen::SparseMatrix<double>> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, unsigned int iter, unsigned int precond, bool verbose);
+Rcpp::NumericMatrix solve_LSCG(const Eigen::Map<Eigen::SparseMatrix<double>> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, unsigned int iter, unsigned int precond, bool verbose);
 RcppExport SEXP _sanic_solve_LSCG(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP precondSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -180,7 +180,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // solve_CG
-Eigen::MatrixXd solve_CG(const Eigen::Map<Eigen::SparseMatrix<double>> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, unsigned int iter, unsigned int precond, bool verbose);
+Rcpp::NumericMatrix solve_CG(const Eigen::Map<Eigen::SparseMatrix<double>> a, const Eigen::Map<Eigen::MatrixXd> b, const Eigen::Map<Eigen::MatrixXd> x0, double tol, unsigned int iter, unsigned int precond, bool verbose);
 RcppExport SEXP _sanic_solve_CG(SEXP aSEXP, SEXP bSEXP, SEXP x0SEXP, SEXP tolSEXP, SEXP iterSEXP, SEXP precondSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

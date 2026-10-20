@@ -38,6 +38,9 @@
 #' @param verbose Logical scalar. Whether to print iterations and tolerance.
 #'
 #' @return Solves for \eqn{x} and returns a numeric matrix with the results.
+#' The matrix has \code{converged}, \code{iterations}, and \code{error}
+#' attributes containing the convergence status, number of iterations, and
+#' Eigen's estimated error.
 #'
 #' @export
 #' @examples

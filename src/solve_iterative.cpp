@@ -3,7 +3,7 @@
 // [[Rcpp::depends(RcppEigen)]]
 
 template <typename Solver, typename MatrixA, typename MatrixB>
-Eigen::MatrixXd run_iterative(
+Rcpp::NumericMatrix run_iterative(
   Solver& solver, const MatrixA& a, const MatrixB& b, const MatrixB& x0,
   double tol, unsigned int iter, bool verbose) {
 
@@ -14,18 +14,25 @@ Eigen::MatrixXd run_iterative(
     Rcpp::stop("Setup failed.");
   }
   Eigen::MatrixXd x = solver.solveWithGuess(b, x0);
-  if(solver.info() != Eigen::Success) {
+  const bool converged = solver.info() == Eigen::Success;
+  const int iterations = solver.iterations();
+  const double error = solver.error();
+  if(!converged) {
     Rcpp::warning("Iterative solver did not converge successfully.");
   }
   if(verbose) {
-    Rcpp::Rcout << "Iterations: " << solver.iterations() << "\n";
-    Rcpp::Rcout << "Estimated error: " << solver.error() << "\n";
+    Rcpp::Rcout << "Iterations: " << iterations << "\n";
+    Rcpp::Rcout << "Estimated error: " << error << "\n";
   }
-  return x;
+  Rcpp::NumericMatrix result = Rcpp::wrap(x);
+  result.attr("converged") = converged;
+  result.attr("iterations") = iterations;
+  result.attr("error") = error;
+  return result;
 }
 
 // [[Rcpp::export]]
-Eigen::MatrixXd solve_BiCGSTAB(
+Rcpp::NumericMatrix solve_BiCGSTAB(
   const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
@@ -49,7 +56,7 @@ Eigen::MatrixXd solve_BiCGSTAB(
 }
 
 // [[Rcpp::export]]
-Eigen::MatrixXd solve_LSCG(
+Rcpp::NumericMatrix solve_LSCG(
   const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
@@ -69,7 +76,7 @@ Eigen::MatrixXd solve_LSCG(
 }
 
 // [[Rcpp::export]]
-Eigen::MatrixXd solve_CG(
+Rcpp::NumericMatrix solve_CG(
   const Eigen::Map<Eigen::SparseMatrix<double>> a,
   const Eigen::Map<Eigen::MatrixXd> b,
   const Eigen::Map<Eigen::MatrixXd> x0,
