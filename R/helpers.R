@@ -84,7 +84,7 @@ maybe_symmetric <- function(
   checks = TRUE
 ) {
   if (isTRUE(checks)) {
-    if (!is.matrix(x)) {
+    if (!is.matrix(x) && !is_sparse(x)) {
       stop("Please provide a matrix")
     }
     if (!is_square(x)) {

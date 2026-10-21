@@ -2,13 +2,20 @@
 % Please edit documentation in R/solve.R
 \name{solve2}
 \alias{solve2}
+\alias{solve2.default}
+\alias{solve2.sanic_lu}
 \title{Solve Systems of Equations}
 \usage{
 solve2(a, b, ...)
+
+\method{solve2}{default}(a, b, ...)
+
+\method{solve2}{sanic_lu}(a, b, ...)
 }
 \arguments{
-\item{a}{Square numeric matrix with the coefficients of the linear system.
-Both dense and sparse matrices are supported (see \code{\link{sparsify}}).}
+\item{a}{Numeric matrix with the coefficients of the linear system, dense or
+sparse (see \code{\link{sparsify}}), or a \code{sanic_lu} factorization
+from \code{\link{factorize_lu}}.}
 
 \item{b}{Numeric vector or matrix at the right-hand side of the linear
 system. If missing, 'b' is set to an identity matrix and 'a' is
@@ -43,5 +50,10 @@ norm(solve2(A, b) - x)
 A <- matrix(rnorm(12), nrow = 4, ncol = 3)
 b <- A \%*\% x
 norm(solve2(A, b) - x)
+
+# Solve reusing an LU factorization
+A <- matrix(rnorm(9), nrow = 3, ncol = 3)
+f <- factorize_lu(A)
+norm(solve2(f, A \%*\% x) - x)
 
 }

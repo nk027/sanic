@@ -1,7 +1,10 @@
 R Package sanic: Solving Ax = b Nimbly in C++
-GPL (>= 3)
-Copyright (C) 2023 Nikolas Kuschnig
 
-UpperHEssenbergEigen.h from the C++ library Spectra
-MPL-2.0
-Copyright (C) 2023 Yixuan Qiu
+sanic is licensed under the GNU General Public License, version 3 or later, except for the third-party code identified below.
+Copyright (C) 2026 Nikolas Kuschnig
+
+src/UpperHessenbergEigen.h is adapted from Eigen and Spectra and is licensed under the Mozilla Public License, version 2.0.
+Copyright (C) 2008 Gael Guennebaud
+Copyright (C) 2010,2012 Jitse Niesen
+Copyright (C) 2016-2021 Yixuan Qiu
+See the source file for its original copyright and license notice.

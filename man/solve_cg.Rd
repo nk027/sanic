@@ -44,6 +44,9 @@ information.}
 }
 \value{
 Solves for \eqn{x} and returns a numeric matrix with the results.
+The matrix has \code{converged}, \code{iterations}, and \code{error}
+attributes containing the convergence status, number of iterations, and
+Eigen's estimated error.
 }
 \description{
 Iterative solvers using the Conjugate Gradient method for sparse systems of

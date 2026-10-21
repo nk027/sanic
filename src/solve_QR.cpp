@@ -35,7 +35,7 @@ Eigen::MatrixXd solve_SQR(
   const Eigen::Map<Eigen::MatrixXd> b,
   unsigned int ordering = 1) {
 
-  if(ordering == 0) {
+  if(ordering == 0 && a.rows() == a.cols()) {
     Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::AMDOrdering<int>> solver;
     return run_qr(solver, a, b);
   }
@@ -43,7 +43,9 @@ Eigen::MatrixXd solve_SQR(
     Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::NaturalOrdering<int>> solver;
     return run_qr(solver, a, b);
   }
-  if(ordering > 2) {
+  if(ordering == 0) {
+    Rcpp::warning("AMD ordering is not available for rectangular matrices -- using COLAMD.");
+  } else if(ordering > 2) {
     Rcpp::warning("No valid ordering requested -- using default.");
   }
   Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;

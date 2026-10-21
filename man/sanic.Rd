@@ -2,6 +2,7 @@
 % Please edit documentation in R/sanic.R
 \docType{package}
 \name{sanic}
+\alias{sanic-package}
 \alias{sanic}
 \title{Solving Ax = b Nimbly in C++}
 \description{
@@ -9,4 +10,28 @@ Routines for solving large systems of linear equations in R.
 Direct and iterative solvers from the Eigen C++ library are made available.
 Solvers include Cholesky, LU, QR, and Krylov subspace methods (Conjugate
 Gradient, BiCGSTAB). Both dense and sparse problems are supported.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/nk027/sanic}
+  \item Report bugs at \url{https://github.com/nk027/sanic/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Nikolas Kuschnig \email{nikolas.kuschnig@wu.ac.at} (\href{https://orcid.org/0000-0002-6642-2543}{ORCID})
+
+Authors:
+\itemize{
+  \item Nikolas Kuschnig \email{nikolas.kuschnig@wu.ac.at} (\href{https://orcid.org/0000-0002-6642-2543}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Lukas Vashold (\href{https://orcid.org/0000-0002-3562-3414}{ORCID}) [contributor]
+  \item Dirk Eddelbuettel (\href{https://orcid.org/0000-0001-6419-907X}{ORCID}) [contributor]
+  \item Yixuan Qiu [contributor]
+}
+
 }
