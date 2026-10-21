@@ -1,6 +1,7 @@
 # sanic: Solving Ax = b Nimbly in C++
 
 [![CRAN](https://www.r-pkg.org/badges/version/sanic)](https://CRAN.R-project.org/package=sanic)
+[![coverage](https://app.gocov.dev/badge/github/nk027/sanic.svg)](https://app.gocov.dev/repos/github/nk027/sanic?ref=badge)
 [![month](https://cranlogs.r-pkg.org/badges/sanic)](https://www.r-pkg.org/pkg/sanic)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/sanic)](https://www.r-pkg.org/pkg/sanic)
 
@@ -16,30 +17,6 @@ Install the released version from [CRAN](https://CRAN.R-project.org/package=sani
 ```r
 install.packages("sanic")
 remotes::install_github("nk027/sanic")
-```
-
-## Testing
-
-The test suite uses [tinytest](https://github.com/markvanderloo/tinytest) and
-runs when the `RUN_TESTS` environment variable is true. Set it for a single
-check:
-
-```sh
-RUN_TESTS=true R CMD check --no-manual sanic_0.0.2.tar.gz
-```
-
-or add `RUN_TESTS=true` to a project-local `.Renviron` and run the suite
-interactively after installing with tests:
-
-```sh
-R CMD INSTALL --install-tests .
-cd tests && Rscript -e 'tinytest::test_package("sanic")'
-```
-
-Coverage can be measured with `covr`:
-
-```r
-RUN_TESTS=true Rscript -e 'Sys.setenv(RUN_TESTS = "true"); covr::package_coverage()'
 ```
 
 ## Usage
@@ -83,26 +60,12 @@ max(abs(A %*% x_cg - b1))
 ```
 
 Classic CG requires a symmetric positive definite matrix. Iterative methods
-offer preconditioners and convergence controls; heed convergence warnings and
-check the residual.
+offer preconditioners and convergence controls.
 
 Use `eigen2()` for eigenvalue decompositions and `svd2()` for singular value
 decompositions of dense matrices. For large sparse matrices, `arnoldi()` and
-`lanczos()` construct smaller Krylov projections. Set `iter` below the matrix dimension to build a smaller projection.
-
-For a visual guide to the methods and their assumptions, see the [usage
-vignette](vignettes/basic-usage.Rmd), or open it after installation:
-
-```r
-vignette("basic-usage", package = "sanic")
-```
-
-For timings against base R and the `Matrix` package, see the [benchmarking
-vignette](vignettes/benchmarks.Rmd):
-
-```r
-vignette("benchmarks", package = "sanic")
-```
+`lanczos()` construct smaller Krylov projections. 
+Set `iter` below the matrix dimension to build a smaller projection.
 
 ## Linear system solvers
 
@@ -115,9 +78,9 @@ starting point for both LLT and LDLT.
 | LU decomposition | `solve_lu()` | Partial or full pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1FullPivLU.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseLU.html) |
 | Householder QR | `solve_qr()` | Column, full, or no pivoting; rectangular least squares | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ColPivHouseholderQR.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1FullPivHouseholderQR.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1HouseholderQR.html), [4](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR.html) |
 | Cholesky decomposition | `solve_chol()` | LDLT by default; LLT with `pivot = 0` | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LDLT.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1LLT.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLDLT.html), [4](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLLT.html) |
-| Iterative Krylov methods | `solve_cg()` | BiCGSTAB (default); LSCG for least squares; CG for symmetric positive definite systems; preconditioners available | Converted¹ | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BiCGSTAB.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1LeastSquaresConjugateGradient.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient.html) |
+| Iterative Krylov methods | `solve_cg()` | BiCGSTAB (default); LSCG for least squares; CG for symmetric positive definite systems; preconditioners available | Only¹ | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BiCGSTAB.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1LeastSquaresConjugateGradient.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient.html) |
 
-¹ Uses sparse matrices internally; dense inputs are converted.
+¹ Sparse matrices are used internally; dense inputs are converted.
 
 ## Spectral methods
 
@@ -125,10 +88,10 @@ starting point for both LLT and LDLT.
 |---|---|---|---|---|
 | Eigenvalue decomposition | `eigen2()` | General square and symmetric matrices | No | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1EigenSolver.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SelfAdjointEigenSolver.html) |
 | Singular value decomposition | `svd2()` | Divide-and-conquer SVD for large problems; Jacobi SVD for small problems | No | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BDCSVD.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1JacobiSVD.html) |
-| Arnoldi iteration | `arnoldi()` | Hessenberg projection; uses Lanczos for symmetric matrices | Converted¹ | [1](https://en.wikipedia.org/wiki/Arnoldi_iteration) |
-| Lanczos algorithm | `lanczos()` | Tridiagonal projection for symmetric matrices | Converted¹ | [1](https://en.wikipedia.org/wiki/Lanczos_algorithm) |
+| Arnoldi iteration | `arnoldi()` | Hessenberg projection; uses Lanczos for symmetric matrices | Only¹ | [1](https://en.wikipedia.org/wiki/Arnoldi_iteration) |
+| Lanczos algorithm | `lanczos()` | Tridiagonal projection for symmetric matrices | Only¹ | [1](https://en.wikipedia.org/wiki/Lanczos_algorithm) |
 
-¹ Uses sparse matrices internally; dense inputs are converted.
+¹ Sparse matrices are used internally; dense inputs are converted.
 
 ## Citation
 
