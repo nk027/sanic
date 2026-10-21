@@ -8,4 +8,5 @@
 ^sanic_[0-9].*$
 ^sanic_.*\.tar\.gz$
 ^.env$
+^Makefile$
 comments\.txt

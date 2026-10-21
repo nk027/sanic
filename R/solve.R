@@ -58,16 +58,24 @@ solve2.default <- function(a, b, ...) {
       # return(solve_chol(a, b, ...))
       # } else {
       ans <- tryCatch(solve_chol(a, b, ...), error = function(e) NULL)
-      if (
-        !is.null(ans) &&
+      if (!is.null(ans)) {
+        # Sparse times dense must not densify 'a' itself
+        fitted <- if (is_sparse(a)) {
+          as.matrix(a %*% ans)
+        } else {
+          as.matrix(a) %*% ans
+        }
+        rhs <- if (missing(b)) diag(dim(a)[1L]) else as.matrix(b)
+        if (
           all(is.finite(ans)) &&
-          isTRUE(all.equal(
-            as.matrix(a) %*% ans,
-            if (missing(b)) diag(dim(a)[1L]) else as.matrix(b),
-            tolerance = sqrt(.Machine$double.eps)
-          ))
-      ) {
-        return(ans)
+            isTRUE(all.equal(
+              fitted,
+              rhs,
+              tolerance = sqrt(.Machine$double.eps)
+            ))
+        ) {
+          return(ans)
+        }
       }
       return(solve_lu(a, b, ...))
     }

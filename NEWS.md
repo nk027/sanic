@@ -1,7 +1,7 @@
 
 # v0.1.0, internal
 
-- Add a `tinytest` for exported solvers
+- Add `tinytest` for exported solvers
   - Over 80% total coverage at the time
 - Add `factorize_lu()` and `solve()` method for reusable factorizations
   - Share the LU core with one-shot solves

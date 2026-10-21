@@ -233,15 +233,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // svd_J
-Rcpp::List svd_J(const Eigen::Map<Eigen::MatrixXd> a, unsigned int type, unsigned int precond);
-RcppExport SEXP _sanic_svd_J(SEXP aSEXP, SEXP typeSEXP, SEXP precondSEXP) {
+Rcpp::List svd_J(const Eigen::Map<Eigen::MatrixXd> a, unsigned int type);
+RcppExport SEXP _sanic_svd_J(SEXP aSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::Map<Eigen::MatrixXd> >::type a(aSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type type(typeSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type precond(precondSEXP);
-    rcpp_result_gen = Rcpp::wrap(svd_J(a, type, precond));
+    rcpp_result_gen = Rcpp::wrap(svd_J(a, type));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -299,7 +298,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sanic_solve_BiCGSTAB", (DL_FUNC) &_sanic_solve_BiCGSTAB, 7},
     {"_sanic_solve_LSCG", (DL_FUNC) &_sanic_solve_LSCG, 7},
     {"_sanic_solve_CG", (DL_FUNC) &_sanic_solve_CG, 7},
-    {"_sanic_svd_J", (DL_FUNC) &_sanic_svd_J, 3},
+    {"_sanic_svd_J", (DL_FUNC) &_sanic_svd_J, 2},
     {"_sanic_svd_BDC", (DL_FUNC) &_sanic_svd_BDC, 2},
     {"_sanic_is_symmetric_D", (DL_FUNC) &_sanic_is_symmetric_D, 2},
     {"_sanic_is_symmetric_S", (DL_FUNC) &_sanic_is_symmetric_S, 2},

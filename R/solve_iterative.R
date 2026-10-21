@@ -124,10 +124,22 @@ solve_cg <- function(
     if (!is.numeric(x0) || (!is.vector(x0) && !is.matrix(x0))) {
       stop("Please provide the guess 'x0' as a numeric vector or matrix.")
     }
+    # The solution has as many rows as 'a' has columns
+    x0_rows <- if (is.null(dim(x0))) {
+      length(x0)
+    } else {
+      dim(x0)[1L]
+    }
+    if (x0_rows != dim(a)[2L]) {
+      stop(
+        "The dimensions of the initial guess 'x0' must match the ",
+        "number of columns in 'a' and the dimensions of 'b'."
+      )
+    }
   } else {
     # Construct it
     x0 <- if (is.vector(b)) {
-      rep(0, min(dim(a)))
+      rep(0, dim(a)[2L])
     } else {
       matrix(0, dim(a)[2L], dim(b)[2L])
     }

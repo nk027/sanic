@@ -92,8 +92,13 @@ maybe_symmetric <- function(
     }
   }
   n <- nrow(x)
-  i <- sample.int(n, min(n, n_compared), replace = TRUE)
-  j <- sample.int(n, min(n, n_compared), replace = TRUE)
+  m <- min(n, n_compared)
+
+  # Deterministically spread comparison positions over rows and pair them
+  # with the mirrored cell on the anti-diagonal so that (i, j) vs (j, i)
+  # asymmetries are caught without touching the random number generator.
+  i <- 1L + trunc((seq_len(m) - 1L) * n / m)
+  j <- n + 1L - i
 
   isTRUE(all.equal.numeric(x[cbind(i, j)], x[cbind(j, i)], tolerance = tol))
 }

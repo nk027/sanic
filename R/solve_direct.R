@@ -101,6 +101,12 @@ solve_chol <- function(a, b, pivot = 1L, ordering = 0L) {
 
   if(!is_square(a)) {stop("Please provide a square matrix 'a'.")}
 
+  b_rows <- if(is.null(dim(b))) {length(b)} else {dim(b)[1L]}
+  is_fitting <- dim(a)[1L] - b_rows == 0L
+  if(!is_fitting) {stop("Both 'a' and 'b' must have the same number of rows.")}
+
+  if(!is_symmetric(a)) {stop("Please provide a symmetric matrix 'a'.")}
+
   pivot <- int_check(pivot, 0L, 2L)
   ordering <- int_check(ordering, 0L, 2L)
 

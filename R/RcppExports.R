@@ -65,8 +65,8 @@ solve_CG <- function(a, b, x0, tol = 0, iter = 0L, precond = 1L, verbose = FALSE
     .Call('_sanic_solve_CG', PACKAGE = 'sanic', a, b, x0, tol, iter, precond, verbose)
 }
 
-svd_J <- function(a, type = 0L, precond = 0L) {
-    .Call('_sanic_svd_J', PACKAGE = 'sanic', a, type, precond)
+svd_J <- function(a, type = 0L) {
+    .Call('_sanic_svd_J', PACKAGE = 'sanic', a, type)
 }
 
 svd_BDC <- function(a, type = 0L) {

@@ -7,18 +7,9 @@
 // [[Rcpp::export]]
 Rcpp::List svd_J(
   const Eigen::Map<Eigen::MatrixXd> a,
-  unsigned int type = 0, unsigned int precond = 0) {
+  unsigned int type = 0) {
 
   Eigen::JacobiSVD < Eigen::MatrixXd, Eigen::ColPivHouseholderQRPreconditioner> svd;
-  if(precond == 1) {
-    Eigen::JacobiSVD < Eigen::MatrixXd, Eigen::FullPivHouseholderQRPreconditioner > svd;
-  } else if(precond == 2) {
-    Eigen::JacobiSVD < Eigen::MatrixXd, Eigen::HouseholderQRPreconditioner > svd;
-  } else if(precond == 3) {
-    Eigen::JacobiSVD < Eigen::MatrixXd, Eigen::NoQRPreconditioner > svd;
-  } else if(precond > 3) {
-    Rcpp::warning("No valid preconditioner requested - using default.");
-  }
 
   if(type == 0) {
     svd.compute(a, Eigen::ComputeThinU | Eigen::ComputeThinV);

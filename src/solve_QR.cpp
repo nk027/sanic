@@ -5,7 +5,12 @@
 template <typename Solver, typename MatrixA, typename MatrixB>
 Eigen::MatrixXd run_qr(Solver& solver, const MatrixA& a, const MatrixB& b) {
   solver.compute(a);
-  return solver.solve(b);
+  // Unpivoted schemes return Inf/NaN on rank deficient matrices without info().
+  Eigen::MatrixXd x = solver.solve(b);
+  if(!x.allFinite()) {
+    Rcpp::stop("Solving failed.");
+  }
+  return x;
 }
 
 // [[Rcpp::export]]
