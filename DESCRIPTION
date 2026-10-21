@@ -14,14 +14,14 @@ Author: Nikolas Kuschnig [aut, cre]  (<https://orcid.org/0000-0002-6642-2543>),
   Dirk Eddelbuettel [ctb] (<https://orcid.org/0000-0001-6419-907X>),
   Yixuan Qiu [ctb]
 Maintainer: Nikolas Kuschnig <nikolas.kuschnig@wu.ac.at>
-Description: Direct and iterative methods for solving linear system and computing eigenvalue and singular value decompositions using the Eigen C++ library in R. Supports dense and sparse linear systemds with Cholesky, LU, QR, conjugate gradient, stabilized biconjugate gradient, and least-squares conjugate gradient methods. Provides reusable factorizations for repeated solves.
+Description: Direct and iterative methods for solving linear systems and computing eigenvalue and singular value decompositions using the Eigen C++ library in R. Supports dense and sparse linear systems with Cholesky, LU, QR, conjugate gradient, stabilized biconjugate gradient, and least-squares conjugate gradient methods. Provides reusable factorizations for repeated solves.
 URL: https://github.com/nk027/sanic
 BugReports: https://github.com/nk027/sanic/issues
 Depends: R (>= 3.3.0)
 Imports: Rcpp (>= 1.0.5), Matrix, methods
 Suggests: knitr, rmarkdown, microbenchmark, tinytest
 VignetteBuilder: knitr
-License: GPL-3 + file LICENSE
+License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppEigen
 Config/roxygen2/version: 8.1.0

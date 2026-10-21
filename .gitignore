@@ -1,3 +1,4 @@
+.env
 deps
 src/symbols.rds
 comments.txt
@@ -17,9 +18,14 @@ comments.txt
 
 # Output files from R CMD build
 /*.tar.gz
+/*_[0-9]*/
 
 # Output files from R CMD check
 /*.Rcheck/
+/..Rcheck/
+
+# Local coverage output
+/scratch/
 
 # RStudio files
 .Rproj.user/

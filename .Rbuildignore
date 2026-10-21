@@ -1,5 +1,11 @@
 ^.git$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-
-comments.txt
+^deps$
+^scratch$
+^\.\.Rcheck$
+^sanic\.Rcheck$
+^sanic_[0-9].*$
+^sanic_.*\.tar\.gz$
+^.env$
+comments\.txt

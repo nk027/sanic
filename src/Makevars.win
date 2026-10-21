@@ -2,6 +2,9 @@
 ## enable compilation with C++11 (or even C++14) where available
 # CXX_STD = CXX11
 
+# Disable Eigen's debug assertions so failures are reported through Rcpp.
+PKG_CPPFLAGS = -DEIGEN_NO_DEBUG
+
 .PHONY: all clean
 
 all: $(SHLIB)
