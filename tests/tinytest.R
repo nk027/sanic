@@ -1,14 +1,7 @@
-# Run the tinytest suite when RUN_TESTS is set to a true value, e.g.
-#
-#   RUN_TESTS=true R CMD check sanic_0.0.2.tar.gz
-#
-# The variable can also be set in a project-local .Renviron file:
-#
-#   RUN_TESTS=true
-#
-# Tests are skipped (rather than failed) when tinytest is unavailable.
+# Run by default, including on CRAN. Set RUN_TESTS=false to opt out locally.
+# Tests are skipped when the suggested package tinytest is unavailable.
 
-run_tests <- tolower(Sys.getenv("RUN_TESTS", "")) %in%
+run_tests <- tolower(Sys.getenv("RUN_TESTS", "true")) %in%
   c("true", "t", "1", "yes", "y")
 
 if (run_tests) {
@@ -18,5 +11,5 @@ if (run_tests) {
     message("Skipping tests: package 'tinytest' is not installed.")
   }
 } else {
-  message("Skipping tests: set RUN_TESTS=true to run them.")
+  message("Skipping tests: RUN_TESTS is disabled.")
 }

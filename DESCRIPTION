@@ -1,7 +1,7 @@
 Package: sanic
 Type: Package
 Title: Solving Ax = b Nimbly in C++
-Version: 0.0.2
+Version: 0.1.0
 Date: 2026-10-21
 Authors@R: c(person("Nikolas", "Kuschnig", role = c("aut", "cre"),
   email = "nikolas.kuschnig@wu.ac.at",

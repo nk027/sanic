@@ -1,13 +1,14 @@
 
-# v0.1.0, internal
+# v0.1.0, CRAN update
 
 - Add `tinytest` for exported solvers
-  - Over 80% total coverage at the time
+  - Around 80% total coverage at the time
 - Add `factorize_lu()` and `solve()` method for reusable factorizations
   - Share the LU core with one-shot solves
   - Check nonfinite inputs and RHS dimensions consistently
+- Merge @eddelbuettel's Eigen 5.0.* PR
 - Add attributes to iterative solver results
-- Add a benchmarking vignette comparing the solvers with base R and `Matrix`
+- Add an illustrative vignette on solvers
 - Several bug fixes and minor tweaks
 
 # v0.0.2, CRAN update

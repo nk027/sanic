@@ -1,12 +1,13 @@
-^.git$
+^\.git$
+^\.gitignore$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^deps$
 ^scratch$
-^\.\.Rcheck$
-^sanic\.Rcheck$
+^.*\.Rcheck$
 ^sanic_[0-9].*$
 ^sanic_.*\.tar\.gz$
-^.env$
+^\.env$
+^cran-comments\.md$
 ^Makefile$
 comments\.txt

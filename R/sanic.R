@@ -9,4 +9,4 @@
 #' @name sanic
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib sanic
-NULL
+"_PACKAGE"

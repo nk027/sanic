@@ -13,7 +13,7 @@ include .env
 export GOCOV_TOKEN
 endif
 
-.PHONY: all document install build check test coverage clean
+.PHONY: all document install build check check-cran test coverage upload clean
 
 all: check coverage
 
@@ -29,8 +29,12 @@ build: document
 check: build
 	$(RUN_TESTS) $(CHECK_ENV) R CMD check --no-manual $(VIGNETTES) $(TARBALL)
 
+# Full submission check; requires LaTeX for the PDF reference manual.
+check-cran: build
+	$(RUN_TESTS) R CMD check --as-cran --run-donttest $(TARBALL)
+
 test: install
-	$(RUN_TESTS) $(R) -e 'tinytest::test_package("$(PKG)", at_home = TRUE)'
+	$(RUN_TESTS) $(R) -e 'tinytest::test_package("$(PKG)", testdir = "tests/tinytest", at_home = TRUE)'
 
 coverage:
 	@mkdir -p scratch
