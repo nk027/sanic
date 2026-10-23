@@ -6,7 +6,7 @@
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/sanic)](https://www.r-pkg.org/pkg/sanic)
 
 **sanic** provides direct and iterative solvers for linear systems in **R**,
-powered by the [*Eigen*](https://eigen.tuxfamily.org) **C++** library. It
+powered by the [*Eigen*](https://libeigen.gitlab.io/eigen/) **C++** library. It
 supports dense and sparse systems, reusable LU factorizations, eigenvalue and
 singular value decompositions, and Arnoldi and Lanczos projections.
 
@@ -75,10 +75,10 @@ starting point for both LLT and LDLT.
 
 | Solver | Function | Notes | Sparse support | Reference |
 |---|---|---|---|---|
-| LU decomposition | `solve_lu()` | Partial or full pivoting | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1FullPivLU.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseLU.html) |
-| Householder QR | `solve_qr()` | Column, full, or no pivoting; rectangular least squares | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1ColPivHouseholderQR.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1FullPivHouseholderQR.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1HouseholderQR.html), [4](https://eigen.tuxfamily.org/dox/classEigen_1_1SparseQR.html) |
-| Cholesky decomposition | `solve_chol()` | LDLT by default; LLT with `pivot = 0` | Yes | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1LDLT.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1LLT.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLDLT.html), [4](https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLLT.html) |
-| Iterative Krylov methods | `solve_cg()` | BiCGSTAB (default); LSCG for least squares; CG for symmetric positive definite systems; preconditioners available | Only¹ | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BiCGSTAB.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1LeastSquaresConjugateGradient.html), [3](https://eigen.tuxfamily.org/dox/classEigen_1_1ConjugateGradient.html) |
+| LU decomposition | `solve_lu()` | Partial or full pivoting | Yes | [1](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1PartialPivLU.html), [2](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1FullPivLU.html), [3](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1SparseLU.html) |
+| Householder QR | `solve_qr()` | Column, full, or no pivoting; rectangular least squares | Yes | [1](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1ColPivHouseholderQR.html), [2](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1FullPivHouseholderQR.html), [3](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1HouseholderQR.html), [4](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1SparseQR.html) |
+| Cholesky decomposition | `solve_chol()` | LDLT by default; LLT with `pivot = 0` | Yes | [1](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1LDLT.html), [2](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1LLT.html), [3](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1SimplicialLDLT.html), [4](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1SimplicialLLT.html) |
+| Iterative Krylov methods | `solve_cg()` | BiCGSTAB (default); LSCG for least squares; CG for symmetric positive definite systems; preconditioners available | Only¹ | [1](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1BiCGSTAB.html), [2](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1LeastSquaresConjugateGradient.html), [3](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1ConjugateGradient.html) |
 
 ¹ Sparse matrices are used internally; dense inputs are converted.
 
@@ -86,8 +86,8 @@ starting point for both LLT and LDLT.
 
 | Method | Function | Notes | Sparse support | Reference |
 |---|---|---|---|---|
-| Eigenvalue decomposition | `eigen2()` | General square and symmetric matrices | No | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1EigenSolver.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1SelfAdjointEigenSolver.html) |
-| Singular value decomposition | `svd2()` | Divide-and-conquer SVD for large problems; Jacobi SVD for small problems | No | [1](https://eigen.tuxfamily.org/dox/classEigen_1_1BDCSVD.html), [2](https://eigen.tuxfamily.org/dox/classEigen_1_1JacobiSVD.html) |
+| Eigenvalue decomposition | `eigen2()` | General square and symmetric matrices | No | [1](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1EigenSolver.html), [2](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1SelfAdjointEigenSolver.html) |
+| Singular value decomposition | `svd2()` | Divide-and-conquer SVD for large problems; Jacobi SVD for small problems | No | [1](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1BDCSVD.html), [2](https://libeigen.gitlab.io/eigen/docs-nightly/classEigen_1_1JacobiSVD.html) |
 | Arnoldi iteration | `arnoldi()` | Hessenberg projection; uses Lanczos for symmetric matrices | Only¹ | [1](https://en.wikipedia.org/wiki/Arnoldi_iteration) |
 | Lanczos algorithm | `lanczos()` | Tridiagonal projection for symmetric matrices | Only¹ | [1](https://en.wikipedia.org/wiki/Lanczos_algorithm) |
 
@@ -97,7 +97,7 @@ starting point for both LLT and LDLT.
 
 To cite **sanic**, please use:
 
-> Kuschnig, N. (2026). *sanic: Solving Ax = b Nimbly in C++* (R package version 0.0.2). https://CRAN.R-project.org/package=sanic
+> Kuschnig, N. (2026). *sanic: Solving Ax = b Nimbly in C++* (R package version 0.1.0). https://CRAN.R-project.org/package=sanic
 
 BibTeX:
 
@@ -106,7 +106,7 @@ BibTeX:
   title  = {{sanic}: Solving {A}x = b Nimbly in {C++}},
   author = {Nikolas Kuschnig},
   year   = {2026},
-  note   = {R package version 0.0.2},
+  note   = {R package version 0.1.0},
   url    = {https://CRAN.R-project.org/package=sanic}
 }
 ```
